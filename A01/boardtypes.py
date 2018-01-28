@@ -66,7 +66,7 @@ class TileBoard(Board):
             # Left
             actions.append([0, -1])
 
-        if none_col + 1 < self.board.get_cols():
+        if none_col + 1 < self.get_cols():
             # Right
             actions.append([0, 1])
 
@@ -74,13 +74,13 @@ class TileBoard(Board):
             # Up
             actions.append([-1, 0])
 
-        if none_row + 1 < self.board.get_rows():
+        if none_row + 1 < self.get_rows():
             # Down
             actions.append([1, 0])
 
         return tuple(actions)
 
-    def move(self, offset) -> tuple:
+    def move(self, offset):
         """
         Given a valid action of the rom [row_delta, col_delta], return a
         new TileBoard that represents the state after the move.
@@ -94,7 +94,11 @@ class TileBoard(Board):
         new_board = copy.deepcopy(self)  # Create a deep copy of the object
         # make modifications to new_board
 
-        return new_board.move(offset)
+        none_row, none_col = self.find_none(self.board)
+        new_board.place(none_row, none_col, new_board.get(none_row + offset[0], none_col + offset[1]))
+        new_board.place(none_row + offset[0], none_col + offset[1], None)
+
+        return new_board
 
     def solved(self) -> bool:
         """
@@ -140,7 +144,7 @@ class TileBoard(Board):
 
     def generate_random_board(self, board):
         tiles = list()
-        tiles.extend(list(range(self.get_rows() * self.get_cols())))
+        tiles.extend(list(range(1, self.get_rows() * self.get_cols())))
         tiles.append(None)  # Empty Tile
 
         done = False
