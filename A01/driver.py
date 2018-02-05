@@ -33,7 +33,7 @@ class Puzzle(object):
                 # noinspection PyBroadException
                 try:
                     chosen_option = options[ord(letter_choice) - ord('a')]
-                except:
+                except Exception:
                     pass
 
                 prompt = "Invalid Choice. Please try again: "
@@ -45,6 +45,10 @@ class Puzzle(object):
         print("Nice Job! You Solved the Puzzle")
 
 
-if __name__ == '__main__':
+def driver():
     size = 8
     Puzzle(size).play()
+
+
+if __name__ == '__main__':
+    driver()
