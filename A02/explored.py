@@ -6,11 +6,12 @@ Created on Feb 12, 2018
 
 
 class Explored(object):
-    "Maintain an explored set.  Assumes that states are hashable"
+    """"Maintain an explored set.  Assumes that states are hashable"""
 
     def __init__(self):
-        "__init__() - Create an empty explored set"
+        """"__init__() - Create an empty explored set"""
 
+        self.hash_map = dict()
         raise NotImplemented
 
     def exists(self, state):
@@ -18,7 +19,10 @@ class Explored(object):
         Returns True or False, state must be hashable
         """
 
-        raise NotImplemented
+        try:
+            return state in self.hash_map[hash(state)]
+        except KeyError:
+            return False
 
     def add(self, state):
         """add(state) - add given state to the explored set.  
@@ -32,4 +36,7 @@ class Explored(object):
         # Note that when you access a Python dictionary by a
         # non existant key, it throws a KeyError
 
-        raise NotImplemented
+        if hash(state) not in self.hash_map.keys():
+            self.hash_map[hash(state)] = set()
+        self.hash_map[hash(state)].append(state)
+
