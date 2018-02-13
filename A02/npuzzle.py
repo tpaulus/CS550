@@ -1,4 +1,5 @@
 from basicsearch_lib02.searchrep import Problem
+from basicsearch_lib02.tileboard import TileBoard
 
 
 class NPuzzle(Problem):
@@ -7,6 +8,7 @@ class NPuzzle(Problem):
     Provides implementations for Problem actions specific to N tile puzzles.
     """
 
+    # noinspection PyMissingConstructor
     def __init__(self, n, force_state=None, **kwargs):
         """"__init__(n, force_state, **kwargs)
         
@@ -25,19 +27,18 @@ class NPuzzle(Problem):
         # as if each entry was a keyword argument:
         #    e.g. foobar(arg1, arg2, …, argn, **kwargs).
 
-        raise NotImplemented
+        self.board = TileBoard(n, force_state)
 
     def actions(self, state):
         """actions(state) - find a set of actions applicable to specified state"""
-
-        raise NotImplemented
+        return self.board.get_actions()
 
     def result(self, state, action):
         """"result(state, action)- apply action to state and return new state"""
 
-        raise NotImplemented
+        return self.board.move(action)
 
     def goal_test(self, state):
         """"goal_test(state) - Is state a goal?"""
 
-        raise NotImplemented
+        return self.board.solved()
