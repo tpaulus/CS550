@@ -8,7 +8,6 @@ class NPuzzle(Problem):
     Provides implementations for Problem actions specific to N tile puzzles.
     """
 
-    # noinspection PyMissingConstructor
     def __init__(self, n, force_state=None, **kwargs):
         """"__init__(n, force_state, **kwargs)
         
@@ -27,18 +26,18 @@ class NPuzzle(Problem):
         # as if each entry was a keyword argument:
         #    e.g. foobar(arg1, arg2, …, argn, **kwargs).
 
-        self.board = TileBoard(n, force_state)
+        super().__init__(TileBoard(n, force_state), kwargs)
 
     def actions(self, state):
         """actions(state) - find a set of actions applicable to specified state"""
-        return self.board.get_actions()
+        return self.initial.get_actions()
 
     def result(self, state, action):
         """"result(state, action)- apply action to state and return new state"""
 
-        return self.board.move(action)
+        return self.initial.move(action)
 
     def goal_test(self, state):
         """"goal_test(state) - Is state a goal?"""
 
-        return self.board.solved()
+        return self.initial.solved()
