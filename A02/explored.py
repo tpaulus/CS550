@@ -38,5 +38,5 @@ class Explored(object):
 
         if hash(state) not in self.hash_map.keys():
             self.hash_map[hash(state)] = set()
-        self.hash_map[hash(state)].append(state)
+        self.hash_map[hash(state)].add(state)
 
