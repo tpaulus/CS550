@@ -81,20 +81,32 @@ class Manhattan:
     """"Manhattan Block Distance heuristic"""
 
     @classmethod
-    def g(cls, parentnode, action, childnode):
-        return (len(childnode.path) + 1) * 2
+    def g(cls, parentnode, action, childnode: Node):
+        return childnode.depth * 2
 
     @classmethod
     def h(cls, state: TileBoard):
-        distance = 0
-        # for i in range(state):
-        #     index = node.index(i + 1)
-        #     row_diff = abs((i / MAT_SIZE) - (index / MAT_SIZE))
-        #     col_diff = abs((i % MAT_SIZE) - (index % MAT_SIZE))
-        #     count += (row_diff + col_diff)
-        # index = node.index(-1)
-        # row_diff = abs((PUZZLE_TYPE / MAT_SIZE) - (index / MAT_SIZE))
-        # col_diff = abs((PUZZLE_TYPE % MAT_SIZE) - (index % MAT_SIZE))
-        # count += (row_diff + col_diff)
-        # return count
-        return distance
+        manhattan_sum = 0
+
+        # Populates Solved State
+        solved = [[None for c in range(state.cols)] for r in range(state.rows)]
+        index = 1
+        for row in range(state.boardsize):
+            for col in range(state.boardsize):
+                if row == state.rows // 2 and col == state.cols // 2:
+                    solved[row][col] = None
+                else:
+                    solved[row][col] = index
+                    index += 1
+
+        # Calculate Distance
+        for row in range(state.boardsize):
+            for col in range(state.boardsize):
+                item = state.get(row, col)
+                # Find location for solved state
+                for solved_row in range(len(solved)):
+                    if item in solved[solved_row]:
+                        # Adds manhattan distance to manhattan_sum
+                        # If item is at [1, 2] in state and [0, 0] in solved then distance is 1 + 2 = 3
+                        manhattan_sum += abs(solved_row - row) + abs(solved[solved_row].index(item) - col)
+        return manhattan_sum

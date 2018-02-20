@@ -26,18 +26,16 @@ class NPuzzle(Problem):
         # as if each entry was a keyword argument:
         #    e.g. foobar(arg1, arg2, …, argn, **kwargs).
 
-        super().__init__(TileBoard(n, force_state), kwargs)
+        super().__init__(TileBoard(n, force_state=force_state), g=kwargs['g'], h=kwargs['h'])
 
     def actions(self, state):
         """actions(state) - find a set of actions applicable to specified state"""
-        return self.initial.get_actions()
+        return state.get_actions()
 
     def result(self, state, action):
         """"result(state, action)- apply action to state and return new state"""
-
-        return self.initial.move(action)
+        return state.move(action)
 
     def goal_test(self, state):
         """"goal_test(state) - Is state a goal?"""
-
-        return self.initial.solved()
+        return state.solved()

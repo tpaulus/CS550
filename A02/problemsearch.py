@@ -101,7 +101,8 @@ def graph_search(problem: Problem, verbose=False, debug=False):
             if child not in frontier and not explored.exists(child):
                 frontier.append(child)
             elif debug:
-                print("Skipping Node - not novel", child)
+                # print("Skipping Node - not novel", child)
+                pass
 
         done = len(frontier) == 0
 
@@ -114,11 +115,11 @@ def graph_search(problem: Problem, verbose=False, debug=False):
 
 
 def print_solution(path: tuple):
-    print("Solution in %d moves", len(path))
+    print("Solution in %d moves" % (len(path) - 1))
     print("Initial State")
     print(path[0])
 
     for i in range(1, len(path)):
-        print("Move %d - %s", i, path[i].action)
+        print("Move %d - %s" % (i, path[i].action))
         print(path[i].state)
         print("")
