@@ -5,19 +5,21 @@ Created on Feb 12, 2018
 @author: Tom Paulus
 """
 
-import logging
 import re
 import time
 from statistics import (mean, stdev)
 
+from basicsearch_lib02.tileboard import TileBoard
 from basicsearch_lib02.utilsdontneed import print_table
 from npuzzle import NPuzzle
 from problemsearch import graph_search
 from searchstrategies import (BreadthFirst, DepthFirst, Manhattan)
 
-TRIAL_SIZE = 31
+TRIAL_SIZE = 1
+# TRIAL_SIZE = 31
 TRIAL_BOARD_SIZE = 8
-SOLUTION_METHODS = [BreadthFirst, DepthFirst, Manhattan]
+SOLUTION_METHODS = [Manhattan]
+# SOLUTION_METHODS = [BreadthFirst, DepthFirst, Manhattan]
 
 
 def tic():
@@ -41,11 +43,14 @@ def driver():
         elapsed_time[method] = list()
 
     for i in range(TRIAL_SIZE):
-        logging.info('Starting Trial #%d', i)
+        print('Starting Trial #%d' % i)
+
+        # board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[8, None, 6, 5, 4, 7, 2, 3, 1]).state_tuple()
+        board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[1, None, 3, 4, 2, 5, 6, 7, 8]).state_tuple()
 
         for method in SOLUTION_METHODS:
-            logging.info('Solving puzzle via %s', method.__name__)
-            puzzle = NPuzzle(TRIAL_BOARD_SIZE, g=method.g, h=method.h)
+            print('Solving puzzle via %s' % method.__name__)
+            puzzle = NPuzzle(TRIAL_BOARD_SIZE, g=method.g, h=method.h, force_state=board_layout)
 
             start_time = tic()
             path, nodes_explored = graph_search(puzzle, debug=True, verbose=True)
@@ -57,9 +62,9 @@ def driver():
             number_of_nodes[method].append(nodes_explored)
             elapsed_time[method].append(duration)
 
-            logging.info('Solved puzzle via %s in %d seconds', method.__name__, duration)
+            print('Solved puzzle via %s in %d seconds' % (method.__name__, duration))
 
-        logging.info('Finished Trial #%d', i)
+        print('Finished Trial #%d' % i)
 
     header = ["Method / Result   ",
               "Length of Plan (Mean/STDEV)",
