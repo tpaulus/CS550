@@ -44,9 +44,10 @@ def driver():
 
     for i in range(TRIAL_SIZE):
         print('Starting Trial #%d' % i)
-
-        # board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[8, None, 6, 5, 4, 7, 2, 3, 1]).state_tuple()
-        board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[1, None, 3, 4, 2, 5, 6, 7, 8]).state_tuple()
+        board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[1, 2, 3, 4, 7, 5, 6, None, 8]).state_tuple()    # 1
+        # board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[4, 1, 2, None, 5, 3, 6, 7, 8]).state_tuple()  # 5
+        # board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[5, 3, 7, None, 1, 2, 4, 6, 8]).state_tuple()  # 15
+        # board_layout = TileBoard(TRIAL_BOARD_SIZE).state_tuple()  # Unknown
 
         for method in SOLUTION_METHODS:
             print('Solving puzzle via %s' % method.__name__)
