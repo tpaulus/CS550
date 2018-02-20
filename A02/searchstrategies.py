@@ -35,27 +35,66 @@ Manhattan - city block heuristic search.  To restrict the complexity of
     state. 
 """
 
-
 # For each of the following classes, create classmethods g and h
 # with the following signatures
 #       @classmethod
 #       def g(cls, parentnode, action, childnode):
-#               return appropritate g value
+#               return appropriate g value
 #       @classmethod
 #        def h(cls, state):
 #               return appropriate h value
+from basicsearch_lib02.searchrep import Node
+from basicsearch_lib02.tileboard import TileBoard
 
 
 class BreadthFirst:
     """BredthFirst - breadthfirst search"""
-    pass
+
+    k = 0
+
+    @classmethod
+    def g(cls, parentnode: Node, action, childnode: Node):
+        # Return Depth
+        return len(childnode.path())
+
+    @classmethod
+    def h(cls, state):
+        # Return Constant K (eg 0)
+        return cls.k
 
 
 class DepthFirst:
     """"DepthFirst - depth first search"""
-    pass
+
+    @classmethod
+    def g(cls, parentnode: Node, action, childnode: Node):
+        # Return Cost thus far
+        raise len(childnode.path())
+
+    @classmethod
+    def h(cls, state: TileBoard):
+        # Return Depth * -1
+        raise NotImplemented
 
 
 class Manhattan:
     """"Manhattan Block Distance heuristic"""
-    pass
+
+    @classmethod
+    def g(cls, parentnode, action, childnode):
+        return (len(childnode.path) + 1) * 2
+
+    @classmethod
+    def h(cls, state: TileBoard):
+        distance = 0
+        # for i in range(state):
+        #     index = node.index(i + 1)
+        #     row_diff = abs((i / MAT_SIZE) - (index / MAT_SIZE))
+        #     col_diff = abs((i % MAT_SIZE) - (index % MAT_SIZE))
+        #     count += (row_diff + col_diff)
+        # index = node.index(-1)
+        # row_diff = abs((PUZZLE_TYPE / MAT_SIZE) - (index / MAT_SIZE))
+        # col_diff = abs((PUZZLE_TYPE % MAT_SIZE) - (index % MAT_SIZE))
+        # count += (row_diff + col_diff)
+        # return count
+        return distance

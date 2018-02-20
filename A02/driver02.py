@@ -51,6 +51,8 @@ def driver():
             path, nodes_explored = graph_search(puzzle, debug=True, verbose=True)
             duration = tock(start_time)
 
+            assert path is not None
+
             length_of_plan[method].append(len(path))
             number_of_nodes[method].append(nodes_explored)
             elapsed_time[method].append(duration)

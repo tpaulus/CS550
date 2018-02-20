@@ -12,7 +12,6 @@ class Explored(object):
         """"__init__() - Create an empty explored set"""
 
         self.hash_map = dict()
-        raise NotImplemented
 
     def exists(self, state):
         """exists(state) - Has this state already been explored?
