@@ -4,12 +4,12 @@ Created on Feb 12, 2018
 @author: Tom Paulus
 """
 
-from basicsearch_lib02.searchrep import (Node, print_nodes)
-from basicsearch_lib02.queues import PriorityQueue 
+from basicsearch_lib02.queues import PriorityQueue
+from basicsearch_lib02.searchrep import (Node, Problem)
 from explored import Explored
-import time
-        
-def graph_search(problem, verbose=False, debug=False):
+
+
+def graph_search(problem: Problem, verbose=False, debug=False):
     """graph_search(problem, verbose, debug) - Given a problem representation
     (instance of basicsearch_lib02.representation.Problem or derived class),
     attempt to solve the problem.
@@ -71,4 +71,54 @@ def graph_search(problem, verbose=False, debug=False):
     nodes_explored - Number of nodes explored (dequeued from frontier)
     """
 
-    raise NotImplemented
+    frontier = PriorityQueue()
+    frontier.append(Node(problem, problem.initial))
+
+    done = False
+
+    nodes_explored = 0
+    explored = Explored()
+
+    while not done:
+        node = frontier.pop()
+
+        if debug:
+            print("Popped Node:", str(node))
+
+        explored.add(node)
+        nodes_explored += 1
+
+        if node.state.solved():
+            if debug:
+                print("A solution has been found!")
+
+            solution_path = node.path()
+            if verbose:
+                print_solution(solution_path)
+            return solution_path, nodes_explored
+
+        for child in node.expand(node.problem):
+            if child not in frontier and not explored.exists(child):
+                frontier.append(child)
+            elif debug:
+                print("Skipping Node - not novel", child)
+
+        done = len(frontier) == 0
+
+        if debug:
+            print("")
+
+    if verbose:
+        print("No solution found")
+    return None, nodes_explored
+
+
+def print_solution(path: tuple):
+    print("Solution in %d moves", len(path))
+    print("Initial State")
+    print(path[0])
+
+    for i in range(1, len(path)):
+        print("Move %d - %s", i, path[i].action)
+        print(path[i].state)
+        print("")
