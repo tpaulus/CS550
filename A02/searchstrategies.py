@@ -66,15 +66,18 @@ class BreadthFirst:
 class DepthFirst:
     """"DepthFirst - depth first search"""
 
+    MAX_DEPTH = 50
+
     @classmethod
     def g(cls, parentnode: Node, action, childnode: Node):
         # Return Cost thus far
-        raise len(childnode.path())
+        if childnode.depth > cls.MAX_DEPTH:
+            return 9999  # Set Max tree depth
+        return childnode.depth * -1
 
     @classmethod
     def h(cls, state: TileBoard):
-        # Return Depth * -1
-        raise NotImplemented
+        return 0
 
 
 class Manhattan:
