@@ -3,6 +3,7 @@ Created on Feb 12, 2018
 
 @author: Tom Paulus
 """
+from collections import deque
 
 from basicsearch_lib02.queues import PriorityQueue
 from basicsearch_lib02.searchrep import (Node, Problem)
@@ -73,6 +74,22 @@ def graph_search(problem: Problem, verbose=False, debug=False):
 
     frontier = PriorityQueue()
     frontier.append(Node(problem, problem.initial))
+    node = frontier.pop()
+    right_pop = True
+    if node.expand(node.problem)[0].g < 0:
+        # DFS
+        print("DEQUE Right")
+        frontier = deque()
+        frontier.append(Node(problem, problem.initial))
+    elif node.expand(node.problem)[0].h < 2:
+        # BFS
+        print("DEQUE Left")
+        right_pop = False
+        frontier = deque()
+        frontier.append(Node(problem, problem.initial))
+    else:
+        # Manhattan
+        frontier.append(node)
     frontier_hash = Explored()
     frontier_hash.add(problem.initial.state_tuple())
     done = False
@@ -80,7 +97,10 @@ def graph_search(problem: Problem, verbose=False, debug=False):
     explored = Explored()
     # print(frontier.A[0][1])
     while not done:
-        node = frontier.pop()
+        if right_pop:
+            node = frontier.pop()   # Manhattan and DFS
+        else:
+            node = frontier.popleft()  # BFS
 
         if debug:
             print("Popped Node:", str(node))
@@ -99,7 +119,8 @@ def graph_search(problem: Problem, verbose=False, debug=False):
             return solution_path, nodes_explored
         else:
             for child in node.expand(node.problem):
-                if not explored.exists(child.state.state_tuple()) and not frontier_hash.exists(child.state.state_tuple()): # and child not in frontier:
+                if not explored.exists(child.state.state_tuple()) and not frontier_hash.exists(
+                        child.state.state_tuple()):  # and child not in frontier:
                     frontier.append(child)
                     frontier_hash.add(child)
                 elif debug:

@@ -15,12 +15,11 @@ from npuzzle import NPuzzle
 from problemsearch import graph_search
 from searchstrategies import (BreadthFirst, DepthFirst, Manhattan)
 
-TRIAL_SIZE = 2
-# TRIAL_SIZE = 31
+TRIAL_SIZE = 31
+# TRIAL_SIZE = 2
 TRIAL_BOARD_SIZE = 8
-# SOLUTION_METHODS = [BreadthFirst, DepthFirst, Manhattan]
-SOLUTION_METHODS = [BreadthFirst, Manhattan]
-
+SOLUTION_METHODS = [BreadthFirst, DepthFirst, Manhattan]
+# SOLUTION_METHODS = [BreadthFirst]
 
 def tic():
     """Return current time representation"""
@@ -37,6 +36,8 @@ def driver():
     number_of_nodes = dict()
     elapsed_time = dict()
 
+    total_time = 0
+
     for method in SOLUTION_METHODS:
         length_of_plan[method] = list()
         number_of_nodes[method] = list()
@@ -46,7 +47,7 @@ def driver():
         print('Starting Trial #%d' % (i + 1))
 
         # Standard Config
-        # board_layout = TileBoard(TRIAL_BOARD_SIZE).state_tuple()
+        board_layout = TileBoard(TRIAL_BOARD_SIZE).state_tuple()
 
         # Random Board - For testing
         # board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[8, None, 6, 5, 4, 7, 2, 3, 1]).state_tuple()
@@ -60,7 +61,7 @@ def driver():
         # board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[1, None, 3, 7, 2, 5, 4, 6, 8]).state_tuple()
 
         # Solvable in ~15 moves
-        board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[5, 3, 7, None, 1, 2, 4, 6, 8]).state_tuple()
+        # board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[5, 3, 7, None, 1, 2, 4, 6, 8]).state_tuple()
 
         for method in SOLUTION_METHODS:
             print('Solving puzzle via %s' % method.__name__)
@@ -69,7 +70,7 @@ def driver():
             start_time = tic()
             path, nodes_explored = graph_search(puzzle, debug=False, verbose=False)
             duration = tock(start_time)
-
+            total_time += duration
             assert path is not None
 
             length_of_plan[method].append(len(path))
@@ -99,6 +100,7 @@ def driver():
                      '{:.3f} / {:.3f}'.format(mean(elapsed_time[method]), stdev(elapsed_time[method]))])
 
     print_table(rows, header=header, sep="\t| ")
+    print("Total Time: {}".format(total_time))
 
 
 if __name__ == '__main__':

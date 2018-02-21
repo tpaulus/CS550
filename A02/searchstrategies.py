@@ -74,7 +74,7 @@ class DepthFirst:
         # Return Cost thus far
         # if childnode.depth > cls.MAX_DEPTH:
         #     return childnode.depth  # Set Max tree depth
-        return childnode.depth * -1
+        return (parentnode.depth + 1) * -1
 
     @classmethod
     def h(cls, state: TileBoard):
