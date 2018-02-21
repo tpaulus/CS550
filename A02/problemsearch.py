@@ -74,6 +74,7 @@ def graph_search(problem: Problem, verbose=False, debug=False):
     frontier = PriorityQueue()
     frontier.append(Node(problem, problem.initial))
     frontier_hash = Explored()
+    frontier_hash.add(problem.initial.state_tuple())
     done = False
     nodes_explored = 0
     explored = Explored()
@@ -85,7 +86,6 @@ def graph_search(problem: Problem, verbose=False, debug=False):
             print("Popped Node:", str(node))
 
         explored.add(node.state.state_tuple())
-        frontier_hash.add(node.state.state_tuple())
         nodes_explored += 1
 
         if node.state.solved():

@@ -66,13 +66,14 @@ class BreadthFirst:
 class DepthFirst:
     """"DepthFirst - depth first search"""
 
-    MAX_DEPTH = 50
+    # MAX_DEPTH = 35
+    # We might want to try and implement Iterative Deepening here, to speed things up.
 
     @classmethod
     def g(cls, parentnode: Node, action, childnode: Node):
         # Return Cost thus far
-        if childnode.depth > cls.MAX_DEPTH:
-            return 9999  # Set Max tree depth
+        # if childnode.depth > cls.MAX_DEPTH:
+        #     return childnode.depth  # Set Max tree depth
         return childnode.depth * -1
 
     @classmethod
