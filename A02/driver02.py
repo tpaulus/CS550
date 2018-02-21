@@ -15,11 +15,10 @@ from npuzzle import NPuzzle
 from problemsearch import graph_search
 from searchstrategies import (BreadthFirst, DepthFirst, Manhattan)
 
-TRIAL_SIZE = 1
+TRIAL_SIZE = 2
 # TRIAL_SIZE = 31
 TRIAL_BOARD_SIZE = 8
-SOLUTION_METHODS = [Manhattan]
-# SOLUTION_METHODS = [BreadthFirst, DepthFirst, Manhattan]
+SOLUTION_METHODS = [BreadthFirst, DepthFirst, Manhattan]
 
 
 def tic():
@@ -43,18 +42,30 @@ def driver():
         elapsed_time[method] = list()
 
     for i in range(TRIAL_SIZE):
-        print('Starting Trial #%d' % i)
-        board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[1, 2, 3, 4, 7, 5, 6, None, 8]).state_tuple()    # 1
-        # board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[4, 1, 2, None, 5, 3, 6, 7, 8]).state_tuple()  # 5
-        # board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[5, 3, 7, None, 1, 2, 4, 6, 8]).state_tuple()  # 15
-        # board_layout = TileBoard(TRIAL_BOARD_SIZE).state_tuple()  # Unknown
+        print('Starting Trial #%d' % (i + 1))
+
+        # Standard Config
+        board_layout = TileBoard(TRIAL_BOARD_SIZE).state_tuple()
+
+        # Random Board - For testing
+        # board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[8, None, 6, 5, 4, 7, 2, 3, 1]).state_tuple()
+
+        # Solvable in 1 move
+        # board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[1, None, 3, 4, 2, 5, 6, 7, 8]).state_tuple()
+
+        # Solvable in ~5 moves
+        board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[4, 1, 2, None, 5, 3, 6, 7, 8]).state_tuple()
+        # board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[1, None, 3, 7, 2, 5, 4, 6, 8]).state_tuple()
+
+        # Solvable in ~15 moves
+        # board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[5, 3, 7, None, 1, 2, 4, 6, 8]).state_tuple()
 
         for method in SOLUTION_METHODS:
             print('Solving puzzle via %s' % method.__name__)
             puzzle = NPuzzle(TRIAL_BOARD_SIZE, g=method.g, h=method.h, force_state=board_layout)
 
             start_time = tic()
-            path, nodes_explored = graph_search(puzzle, debug=True, verbose=True)
+            path, nodes_explored = graph_search(puzzle, debug=False, verbose=True)
             duration = tock(start_time)
 
             assert path is not None
@@ -65,7 +76,9 @@ def driver():
 
             print('Solved puzzle via %s in %d seconds' % (method.__name__, duration))
 
-        print('Finished Trial #%d' % i)
+        print('Finished Trial #%d' % (i + 1))
+
+    print("\n\n==================================================\n\n\n")
 
     header = ["Method / Result   ",
               "Length of Plan (Mean/STDEV)",
