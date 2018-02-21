@@ -19,6 +19,7 @@ TRIAL_SIZE = 2
 # TRIAL_SIZE = 31
 TRIAL_BOARD_SIZE = 8
 SOLUTION_METHODS = [BreadthFirst, DepthFirst, Manhattan]
+SOLUTION_METHODS = [BreadthFirst, Manhattan]
 
 
 def tic():
@@ -45,16 +46,16 @@ def driver():
         print('Starting Trial #%d' % (i + 1))
 
         # Standard Config
-        board_layout = TileBoard(TRIAL_BOARD_SIZE).state_tuple()
+        # board_layout = TileBoard(TRIAL_BOARD_SIZE).state_tuple()
 
         # Random Board - For testing
-        # board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[8, None, 6, 5, 4, 7, 2, 3, 1]).state_tuple()
+        board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[8, None, 6, 5, 4, 7, 2, 3, 1]).state_tuple()
 
         # Solvable in 1 move
         # board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[1, None, 3, 4, 2, 5, 6, 7, 8]).state_tuple()
 
         # Solvable in ~5 moves
-        board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[4, 1, 2, None, 5, 3, 6, 7, 8]).state_tuple()
+        # board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[4, 1, 2, None, 5, 3, 6, 7, 8]).state_tuple()
         # board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[1, None, 3, 7, 2, 5, 4, 6, 8]).state_tuple()
 
         # Solvable in ~15 moves
@@ -65,7 +66,7 @@ def driver():
             puzzle = NPuzzle(TRIAL_BOARD_SIZE, g=method.g, h=method.h, force_state=board_layout)
 
             start_time = tic()
-            path, nodes_explored = graph_search(puzzle, debug=False, verbose=True)
+            path, nodes_explored = graph_search(puzzle, debug=False, verbose=False)
             duration = tock(start_time)
 
             assert path is not None

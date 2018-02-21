@@ -73,12 +73,11 @@ def graph_search(problem: Problem, verbose=False, debug=False):
 
     frontier = PriorityQueue()
     frontier.append(Node(problem, problem.initial))
-
+    frontier_hash = Explored()
     done = False
-
     nodes_explored = 0
     explored = Explored()
-
+    # print(frontier.A[0][1])
     while not done:
         node = frontier.pop()
 
@@ -86,6 +85,7 @@ def graph_search(problem: Problem, verbose=False, debug=False):
             print("Popped Node:", str(node))
 
         explored.add(node.state.state_tuple())
+        frontier_hash.add(node.state.state_tuple())
         nodes_explored += 1
 
         if node.state.solved():
@@ -93,22 +93,22 @@ def graph_search(problem: Problem, verbose=False, debug=False):
                 print("A solution has been found!")
 
             solution_path = node.path()
+            done = True
             if verbose:
                 print_solution(solution_path)
             return solution_path, nodes_explored
-
-        for child in node.expand(node.problem):
-            if not explored.exists(child.state.state_tuple()) and child not in frontier:
-                frontier.append(child)
-            elif debug:
-                # print("Skipping Node - not novel", child)
-                pass
-
-        done = len(frontier) == 0
+        else:
+            for child in node.expand(node.problem):
+                if not explored.exists(child.state.state_tuple()) and  not frontier_hash.exists(child.state.state_tuple()): # and child not in frontier:
+                    frontier.append(child)
+                    frontier_hash.add(child)
+                elif debug:
+                    # print("Skipping Node - not novel", child)
+                    pass
+            done = len(frontier) == 0
 
         if debug:
             print("")
-
     if verbose:
         print("No solution found")
     return None, nodes_explored
