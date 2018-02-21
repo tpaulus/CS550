@@ -85,7 +85,7 @@ def graph_search(problem: Problem, verbose=False, debug=False):
         if debug:
             print("Popped Node:", str(node))
 
-        explored.add(node.state)
+        explored.add(node.state.state_tuple())
         nodes_explored += 1
 
         if node.state.solved():
@@ -98,7 +98,7 @@ def graph_search(problem: Problem, verbose=False, debug=False):
             return solution_path, nodes_explored
 
         for child in node.expand(node.problem):
-            if child not in frontier and not explored.exists(child.state):
+            if not explored.exists(child.state.state_tuple()) and child not in frontier:
                 frontier.append(child)
             elif debug:
                 # print("Skipping Node - not novel", child)
