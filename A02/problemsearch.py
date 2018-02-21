@@ -99,7 +99,7 @@ def graph_search(problem: Problem, verbose=False, debug=False):
             return solution_path, nodes_explored
         else:
             for child in node.expand(node.problem):
-                if not explored.exists(child.state.state_tuple()) and  not frontier_hash.exists(child.state.state_tuple()): # and child not in frontier:
+                if not explored.exists(child.state.state_tuple()) and not frontier_hash.exists(child.state.state_tuple()): # and child not in frontier:
                     frontier.append(child)
                     frontier_hash.add(child)
                 elif debug:
