@@ -78,12 +78,10 @@ def graph_search(problem: Problem, verbose=False, debug=False):
     right_pop = True
     if node.expand(node.problem)[0].g < 0:
         # DFS
-        print("DEQUE Right")
         frontier = deque()
         frontier.append(Node(problem, problem.initial))
     elif node.expand(node.problem)[0].h < 2:
         # BFS
-        print("DEQUE Left")
         right_pop = False
         frontier = deque()
         frontier.append(Node(problem, problem.initial))
@@ -95,7 +93,6 @@ def graph_search(problem: Problem, verbose=False, debug=False):
     done = False
     nodes_explored = 0
     explored = Explored()
-    # print(frontier.A[0][1])
     while not done:
         if right_pop:
             node = frontier.pop()   # Manhattan and DFS

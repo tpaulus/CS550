@@ -19,7 +19,7 @@ TRIAL_SIZE = 31
 # TRIAL_SIZE = 2
 TRIAL_BOARD_SIZE = 8
 SOLUTION_METHODS = [BreadthFirst, DepthFirst, Manhattan]
-# SOLUTION_METHODS = [BreadthFirst]
+
 
 def tic():
     """Return current time representation"""
@@ -35,8 +35,6 @@ def driver():
     length_of_plan = dict()
     number_of_nodes = dict()
     elapsed_time = dict()
-
-    total_time = 0
 
     for method in SOLUTION_METHODS:
         length_of_plan[method] = list()
@@ -70,7 +68,6 @@ def driver():
             start_time = tic()
             path, nodes_explored = graph_search(puzzle, debug=False, verbose=False)
             duration = tock(start_time)
-            total_time += duration
             assert path is not None
 
             length_of_plan[method].append(len(path))
@@ -100,7 +97,6 @@ def driver():
                      '{:.3f} / {:.3f}'.format(mean(elapsed_time[method]), stdev(elapsed_time[method]))])
 
     print_table(rows, header=header, sep="\t| ")
-    print("Total Time: {}".format(total_time))
 
 
 if __name__ == '__main__':
