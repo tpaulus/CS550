@@ -19,6 +19,11 @@ TRIAL_SIZE = 31
 TRIAL_BOARD_SIZE = 8
 SOLUTION_METHODS = [BreadthFirst, DepthFirst, Manhattan]
 
+# Output Configuration
+DEBUG = False
+INFO = True
+VERBOSE = False
+
 
 def tic():
     """Return current time representation"""
@@ -61,11 +66,13 @@ def driver():
         # board_layout = TileBoard(TRIAL_BOARD_SIZE, force_state=[5, 3, 7, None, 1, 2, 4, 6, 8]).state_tuple()
 
         for method in SOLUTION_METHODS:
-            print('Solving puzzle via %s' % method.__name__)
+            if INFO:
+                print('Solving puzzle via %s' % method.__name__)
+
             puzzle = NPuzzle(TRIAL_BOARD_SIZE, g=method.g, h=method.h, force_state=board_layout)
 
             start_time = tic()
-            path, nodes_explored = graph_search(puzzle, debug=False, verbose=False)
+            path, nodes_explored = graph_search(puzzle, debug=DEBUG, verbose=VERBOSE)
             duration = tock(start_time)
             assert path is not None
 
@@ -73,11 +80,13 @@ def driver():
             number_of_nodes[method].append(nodes_explored)
             elapsed_time[method].append(duration)
 
-            print('Solved puzzle via %s in %d seconds' % (method.__name__, duration))
+            if INFO:
+                print('Solved puzzle via %s in %d seconds' % (method.__name__, duration))
 
         print('Finished Trial #%d' % (i + 1))
 
-    print("\n\n==================================================\n\n\n")
+    if INFO or DEBUG or VERBOSE:
+        print("\n\n==================================================\n\n\n")
 
     header = ["Method / Result   ",
               "Length of Plan (Mean/STDEV)",
