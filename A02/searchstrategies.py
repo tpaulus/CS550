@@ -32,7 +32,10 @@ Manhattan - city block heuristic search.  To restrict the complexity of
         678
     When multiple solutions are allowed, the heuristic becomes a little more
     complex as the city block distance must be estimated to each possible solution
-    state. 
+    state.
+
+@author: Tom Paulus
+@author: William Fox
 """
 
 # For each of the following classes, create classmethods g and h

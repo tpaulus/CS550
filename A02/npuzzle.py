@@ -1,6 +1,11 @@
 from basicsearch_lib02.searchrep import Problem
 from basicsearch_lib02.tileboard import TileBoard
 
+"""
+@author: Tom Paulus
+@author: William Fox
+"""
+
 
 class NPuzzle(Problem):
     """

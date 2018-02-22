@@ -3,6 +3,7 @@ Driver for graph search problem
 Created on Feb 12, 2018
 
 @author: Tom Paulus
+@author: William Fox
 """
 
 import re
@@ -46,7 +47,8 @@ def driver():
         elapsed_time[method] = list()
 
     for i in range(TRIAL_SIZE):
-        print('Starting Trial #%d' % (i + 1))
+        if INFO:
+            print('Starting Trial #%d' % (i + 1))
 
         # Standard Config
         board_layout = TileBoard(TRIAL_BOARD_SIZE).state_tuple()
