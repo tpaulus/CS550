@@ -97,7 +97,7 @@ class Manhattan:
                     solved[row][col] = index
                     index += 1
 
-        # Calculate Distance
+        # Calculate Displacements
         for row in range(state.boardsize):
             for col in range(state.boardsize):
                 item = state.get(row, col)

@@ -16,7 +16,6 @@ from problemsearch import graph_search
 from searchstrategies import (BreadthFirst, DepthFirst, Manhattan)
 
 TRIAL_SIZE = 31
-# TRIAL_SIZE = 2
 TRIAL_BOARD_SIZE = 8
 SOLUTION_METHODS = [BreadthFirst, DepthFirst, Manhattan]
 

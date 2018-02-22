@@ -95,7 +95,7 @@ def graph_search(problem: Problem, verbose=False, debug=False):
     explored = Explored()
     while not done:
         if right_pop:
-            node = frontier.pop()   # Manhattan and DFS
+            node = frontier.pop()  # Manhattan and DFS
         else:
             node = frontier.popleft()  # BFS
 
@@ -108,7 +108,6 @@ def graph_search(problem: Problem, verbose=False, debug=False):
         if node.state.solved():
             if debug:
                 print("A solution has been found!")
-
             solution_path = node.path()
             done = True
             if verbose:
@@ -116,15 +115,15 @@ def graph_search(problem: Problem, verbose=False, debug=False):
             return solution_path, nodes_explored
         else:
             for child in node.expand(node.problem):
+                # Add new children to frontier
                 if not explored.exists(child.state.state_tuple()) and not frontier_hash.exists(
-                        child.state.state_tuple()):  # and child not in frontier:
+                        child.state.state_tuple()):
                     frontier.append(child)
                     frontier_hash.add(child)
                 elif debug:
-                    # print("Skipping Node - not novel", child)
+                    print("Skipping Node - not novel", child)
                     pass
             done = len(frontier) == 0
-
         if debug:
             print("")
     if verbose:
