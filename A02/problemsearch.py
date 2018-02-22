@@ -3,6 +3,7 @@ Created on Feb 12, 2018
 
 @author: Tom Paulus
 """
+from collections import deque
 
 from basicsearch_lib02.queues import PriorityQueue
 from basicsearch_lib02.searchrep import (Node, Problem)
@@ -73,14 +74,30 @@ def graph_search(problem: Problem, verbose=False, debug=False):
 
     frontier = PriorityQueue()
     frontier.append(Node(problem, problem.initial))
-
+    node = frontier.pop()
+    right_pop = True
+    if node.expand(node.problem)[0].g < 0:
+        # DFS
+        frontier = deque()
+        frontier.append(Node(problem, problem.initial))
+    elif node.expand(node.problem)[0].h < 2:
+        # BFS
+        right_pop = False
+        frontier = deque()
+        frontier.append(Node(problem, problem.initial))
+    else:
+        # Manhattan
+        frontier.append(node)
+    frontier_hash = Explored()
+    frontier_hash.add(problem.initial.state_tuple())
     done = False
-
     nodes_explored = 0
     explored = Explored()
-
     while not done:
-        node = frontier.pop()
+        if right_pop:
+            node = frontier.pop()  # Manhattan and DFS
+        else:
+            node = frontier.popleft()  # BFS
 
         if debug:
             print("Popped Node:", str(node))
@@ -91,24 +108,24 @@ def graph_search(problem: Problem, verbose=False, debug=False):
         if node.state.solved():
             if debug:
                 print("A solution has been found!")
-
             solution_path = node.path()
+            done = True
             if verbose:
                 print_solution(solution_path)
             return solution_path, nodes_explored
-
-        for child in node.expand(node.problem):
-            if not explored.exists(child.state.state_tuple()) and child not in frontier:
-                frontier.append(child)
-            elif debug:
-                # print("Skipping Node - not novel", child)
-                pass
-
-        done = len(frontier) == 0
-
+        else:
+            for child in node.expand(node.problem):
+                # Add new children to frontier
+                if not explored.exists(child.state.state_tuple()) and not frontier_hash.exists(
+                        child.state.state_tuple()):
+                    frontier.append(child)
+                    frontier_hash.add(child)
+                elif debug:
+                    print("Skipping Node - not novel", child)
+                    pass
+            done = len(frontier) == 0
         if debug:
             print("")
-
     if verbose:
         print("No solution found")
     return None, nodes_explored

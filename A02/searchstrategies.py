@@ -66,14 +66,9 @@ class BreadthFirst:
 class DepthFirst:
     """"DepthFirst - depth first search"""
 
-    MAX_DEPTH = 50
-
     @classmethod
     def g(cls, parentnode: Node, action, childnode: Node):
-        # Return Cost thus far
-        if childnode.depth > cls.MAX_DEPTH:
-            return 9999  # Set Max tree depth
-        return childnode.depth * -1
+        return (parentnode.depth + 1) * -1
 
     @classmethod
     def h(cls, state: TileBoard):
@@ -102,7 +97,7 @@ class Manhattan:
                     solved[row][col] = index
                     index += 1
 
-        # Calculate Distance
+        # Calculate Displacements
         for row in range(state.boardsize):
             for col in range(state.boardsize):
                 item = state.get(row, col)
