@@ -8,17 +8,17 @@ import checkerboard
 
 boards = dict()
 
+
 def init_boards():
     """Set up a library of board positions for test purposes
     WARNING:  Some components of the checkers program rely on this library
     for testing.  Changing board configurations will result in breakage of
     tests if the tests are not updated.  Adding new tests is fine.
     """
-    
-    
+
     # Initial board
     boards["Pristine"] = checkerboard.CheckerBoard()
-    
+
     # Set up for two red single hops
     #           0  1  2  3  4  5  6  7
     #        0  .  b  .  b  .  b  .  b 
@@ -37,7 +37,7 @@ def init_boards():
     b.place(5, 6, None)
     b.place(4, 7, 'r')
     b.recount_pieces()  # Update pawn/king counts
-    
+
     boards["SingleHopsRed"] = b
 
     # Set up for black single hops    
@@ -77,10 +77,9 @@ def init_boards():
     b.place(2, 1, 'r')
     b.place(2, 3, None)
     b.place(1, 2, 'r')
-    b.place(1, 6, None)        
+    b.place(1, 6, None)
     b.recount_pieces()  # Update pawn/king counts
     boards["multihop"] = b
-
 
     # KingBlack
     # Black can move to become a King but should
@@ -94,7 +93,7 @@ def init_boards():
     #    5  .  .  .  .  .  .  .  . 
     #    6  .  .  .  r  .  r  .  . 
     #    7  .  .  .  .  .  .  .  .
-    b  = checkerboard.CheckerBoard()
+    b = checkerboard.CheckerBoard()
     # clear the board
     for r in range(b.rows):
         for c in range(b.coloffset[r], b.cols, 2):
@@ -107,7 +106,7 @@ def init_boards():
     b.place(6, 5, 'r')
     b.place(4, 5, 'r')
     b.recount_pieces()  # Update pawn/king counts
-    boards["KingBlack"] = b 
+    boards["KingBlack"] = b
 
     # BlackKingTour
     #    0  1  2  3  4  5  6  7 
@@ -123,7 +122,7 @@ def init_boards():
     b.place(3, 4, 'B')  # king that will make tour
     b.recount_pieces()
     boards["BlackKingTour"] = b
-    
+
     # RedKingTour
     # Probably don't need to test this one as rules similar, but...        
     #    0  1  2  3  4  5  6  7 
@@ -144,7 +143,7 @@ def init_boards():
     b.place(4, 5, 'b')
     b.recount_pieces()
     boards["RedKingTour"] = b
-    
+
     b = checkerboard.CheckerBoard()
     b.clearboard()
     b.place(0, 1, 'b')
@@ -159,7 +158,7 @@ def init_boards():
     b.place(6, 3, 'r')
     b.recount_pieces()
     boards["StrategyTest1"] = b
-    
+
     # EndGame 1 - Red can easily win
     #       0  1  2  3  4  5  6  7 
     #    0     .     .     R     b 
@@ -172,13 +171,11 @@ def init_boards():
     #    7  .     .     .     .    
     b = checkerboard.CheckerBoard()
     b.clearboard()
-    b.place(6,7, 'R')
-    b.place(0,5, 'R')
-    b.place(0,7, 'b')
+    b.place(6, 7, 'R')
+    b.place(0, 5, 'R')
+    b.place(0, 7, 'b')
     b.recount_pieces()
     boards["EndGame1"] = b
-    
+
 
 init_boards()
-
- 

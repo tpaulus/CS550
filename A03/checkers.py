@@ -21,11 +21,11 @@ import tonto
 # human - human player, prompts for input    
 import human
 
-import boardlibrary # might be useful for debuggingimport tonto
+import boardlibrary  # might be useful for debuggingimport tonto
 import human
 
+import boardlibrary  # might be useful for debugging
 
-import boardlibrary # might be useful for debugging
 
 def elapsed(earlier, later):
     """elapsed - Convert elapsed time.time objects to duration string
@@ -44,9 +44,9 @@ def elapsed(earlier, later):
     
     """
     return time.strftime('%H:%M:%S', time.gmtime(later - earlier))
-           
 
-def Game(red=human.Strategy, black=tonto.Strategy, 
+
+def Game(red=human.Strategy, black=tonto.Strategy,
          maxplies=5, init=None, verbose=True, firstmove=0):
     """Game(red, black, maxplies, init, verbose, turn)
     Start a game of checkers
@@ -59,21 +59,9 @@ def Game(red=human.Strategy, black=tonto.Strategy,
 
     # Don't forget to create instances of your strategy,
     # e.g. black('b', checkerboard.CheckerBoard, maxplies)
-    
+
     raise NotImplemented
 
 
 if __name__ == "__main__":
-    Game()  
-        
-        
-        
-
-
-        
-                    
-            
-        
-
-    
-    
+    Game()
