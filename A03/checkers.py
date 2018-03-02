@@ -60,26 +60,42 @@ def Game(red=human.Strategy, black=human.Strategy,
 
     turn = firstmove
     board = CheckerBoard() if init is None else init
+    winner = None
     while not board.is_terminal()[0]:
         if turn is 0:
+            if verbose:
+                print("Red Player's Turn")
+
             board, action = red_strategy.play(board)
             if action is None:
+                if verbose:
+                    print("Red Player has Forfeited")
+                winner = 'b'
                 # Forfeit
                 break
         else:
+            if verbose:
+                print("Black Player's Turn")
+
             board, action = black_strategy.play(board)
             if action is None:
+                if verbose:
+                    print("Black Player has Forfeited")
+                winner = 'r'
                 # Forfeit
                 break
 
         turn = (turn + 1) % 2
         if turn % 2 == 0:
+            if verbose:
+                print("End of Cycle")
             print("\n\n")
 
     if board.is_terminal()[0]:
-        print("Game Over! - {} wins".format(board.is_terminal()[1]))
+        winner = board.is_terminal()[1]
+        print("Game Over! - {} wins".format(winner))
     else:
-        print("Somebody gave up, not just in this game, but also in life!")
+        print("The other player Forfeit - {} wins!".format(winner))
 
 
 if __name__ == "__main__":
