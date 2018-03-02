@@ -31,7 +31,7 @@ class Strategy:
         "Return the utility of the specified board"
         raise NotImplementedError("Subclass must implement")
 
-    def play(self, board) -> (tuple, tuple):
+    def play(self, board) -> (checkerboard, tuple):
         """"play - Make a move
         Given a board, return (newboard, action) where newboard is
         the result of having applied action to board and action is
