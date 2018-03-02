@@ -27,11 +27,11 @@ class Strategy:
         self.minplayer = game.other_player(player)
         self.maxplies = maxplies
 
-    def utility(self, board):
+    def utility(self, board) -> int:
         "Return the utility of the specified board"
         raise NotImplementedError("Subclass must implement")
 
-    def play(self, board):
+    def play(self, board) -> (tuple, tuple):
         """"play - Make a move
         Given a board, return (newboard, action) where newboard is
         the result of having applied action to board and action is

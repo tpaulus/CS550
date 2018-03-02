@@ -5,9 +5,12 @@ Created on Feb 22, 2015
 '''
 
 import time
-import datetime
 
-import checkerboard
+# human - human player, prompts for input
+import human
+from checkerboard import *
+
+
 # tonto - Professor Roch's not too smart strategy
 # You are not given source code to this, but compiled .pyc files
 # are available for Python 3.5 and 3.6 (fails otherwise).
@@ -16,15 +19,7 @@ import checkerboard
 # against another computer player.
 #
 # Decompilation is cheating, don't do it.
-import tonto
-
-# human - human player, prompts for input    
-import human
-
-import boardlibrary  # might be useful for debuggingimport tonto
-import human
-
-import boardlibrary  # might be useful for debugging
+# import tonto
 
 
 def elapsed(earlier, later):
@@ -46,7 +41,7 @@ def elapsed(earlier, later):
     return time.strftime('%H:%M:%S', time.gmtime(later - earlier))
 
 
-def Game(red=human.Strategy, black=tonto.Strategy,
+def Game(red=human.Strategy, black=human.Strategy,
          maxplies=5, init=None, verbose=True, firstmove=0):
     """Game(red, black, maxplies, init, verbose, turn)
     Start a game of checkers
@@ -60,7 +55,31 @@ def Game(red=human.Strategy, black=tonto.Strategy,
     # Don't forget to create instances of your strategy,
     # e.g. black('b', checkerboard.CheckerBoard, maxplies)
 
-    raise NotImplemented
+    red_strategy = red('r', CheckerBoard, maxplies)
+    black_strategy = black('b', CheckerBoard, maxplies)
+
+    turn = firstmove
+    board = CheckerBoard() if init is None else init
+    while not board.is_terminal()[0]:
+        if turn is 0:
+            board, action = red_strategy.play(board)
+            if action is None:
+                # Forfeit
+                break
+        else:
+            board, action = black_strategy.play(board)
+            if action is None:
+                # Forfeit
+                break
+
+        turn = (turn + 1) % 2
+        if turn % 2 == 0:
+            print("\n\n")
+
+    if board.is_terminal()[0]:
+        print("Game Over! - {} wins".format(board.is_terminal()[1]))
+    else:
+        print("Somebody gave up, not just in this game, but also in life!")
 
 
 if __name__ == "__main__":
