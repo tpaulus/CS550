@@ -47,6 +47,11 @@ class AlphaBetaSearch:
         maxplies- Maximum ply depth to search
         verbose - Output debugging information
         """
+        self.__strategy = strategy
+        self.__maxplayer = maxplayer
+        self.__minplayer = minplayer
+        self.__maxplies = maxplies
+        self.__verbose = verbose
 
     def alphabeta(self, state):
         """alphbeta(state) - Run an alphabeta search from the current
