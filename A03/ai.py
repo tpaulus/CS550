@@ -5,6 +5,7 @@ implement a concrete Strategy class and AlphaBetaSearch
 """
 import abstractstrategy
 from checkerboard import *
+import sys
 
 
 class Strategy(abstractstrategy.Strategy):
@@ -24,6 +25,7 @@ class Strategy(abstractstrategy.Strategy):
         else:
             return black - red
 
+
 class AlphaBetaSearch:
     """AlphaBetaSearch
     Conduct alpha beta searches from a given state.
@@ -38,7 +40,7 @@ class AlphaBetaSearch:
     best_move = search.alphabeta(some_checker_board)
     """
 
-    def __init__(self, strategy, maxplayer, minplayer, maxplies=3,
+    def __init__(self, strategy: Strategy, maxplayer, minplayer, maxplies=3,
                  verbose=False):
         """"AlphaBetaSearch - Initialize a class capable of alphabeta search
         strategy - implementation of AbstractStrategy class
@@ -53,8 +55,40 @@ class AlphaBetaSearch:
         self.__maxplies = maxplies
         self.__verbose = verbose
 
-    def alphabeta(self, state):
+    def alphabeta(self, state:CheckerBoard):
         """alphbeta(state) - Run an alphabeta search from the current
        state. Returns best action.
        """
-    # define other helper methods as needed
+        value = self.max_value(state, -1 * sys.maxsize, sys.maxsize)
+        for action in state.get_actions(self.__maxplayer):
+            if self.__strategy.utility(state.move(action)) is value:
+                return action
+        raise Exception("No Action Made")
+
+    def max_value(self, state: CheckerBoard, alpha: int, beta: int):
+        # Negative Infinity
+        value = -1 * sys.maxsize
+        if state.is_terminal():
+            value = self.__strategy.utility(state)
+        else:
+            for action in state.get_actions(self.__maxplayer):
+                value = max(value, self.min_value(state.move(action), alpha, beta))
+                if value >= beta:
+                    break
+                else:
+                    alpha = max(alpha, value)
+        return value
+
+    def min_value(self, state: CheckerBoard, alpha: int, beta: int):
+        # Infinity
+        value = sys.maxsize
+        if state.is_terminal():
+            value = self.__strategy.utility(state)
+        else:
+            for action in state.get_actions(self.__minplayer):
+                value = min(value, self.max_value(state.move(action), alpha, beta))
+                if value <= alpha:
+                    break
+                else:
+                    beta = min(beta, value)
+        return value
