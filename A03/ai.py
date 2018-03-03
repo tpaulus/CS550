@@ -56,41 +56,39 @@ class AlphaBetaSearch:
         self.__minplayer = minplayer
         self.__maxplies = maxplies
         self.__verbose = verbose
-        self.__depth = 0
 
     def alphabeta(self, state: CheckerBoard) -> tuple:
         """alphbeta(state) - Run an alphabeta search from the current
        state. Returns best action.
        """
-        value = self.max_value(state, -1 * sys.maxsize, sys.maxsize)
+        value = self.max_value(state, -1 * sys.maxsize, sys.maxsize, 0)
         for action in state.get_actions(self.__maxplayer):
             if self.__strategy.utility(state.move(action)) is value:
                 return action
         raise Exception("No Action Made")
 
-    def max_value(self, state: CheckerBoard, alpha: int, beta: int) -> int:
+    def max_value(self, state: CheckerBoard, alpha: int, beta: int, depth: int) -> int:
         # Negative Infinity
         value = -1 * sys.maxsize
-        self.__depth += 1
-        if state.is_terminal()[0] or self.__depth > self.__maxplies:
+        if state.is_terminal()[0] or depth > self.__maxplies:
             value = self.__strategy.utility(state)
         else:
             for action in state.get_actions(self.__maxplayer):
-                value = max(value, self.min_value(state.move(action), alpha, beta))
+                value = max(value, self.min_value(state.move(action), alpha, beta, depth + 1))
                 if value >= beta:
                     break
                 else:
                     alpha = max(alpha, value)
         return value
 
-    def min_value(self, state: CheckerBoard, alpha: int, beta: int) -> int:
+    def min_value(self, state: CheckerBoard, alpha: int, beta: int, depth: int) -> int:
         # Infinity
         value = sys.maxsize
-        if state.is_terminal()[0]:
+        if state.is_terminal()[0] or depth > self.__maxplies:
             value = self.__strategy.utility(state)
         else:
             for action in state.get_actions(self.__minplayer):
-                value = min(value, self.max_value(state.move(action), alpha, beta))
+                value = min(value, self.max_value(state.move(action), alpha, beta, depth + 1))
                 if value <= alpha:
                     break
                 else:
