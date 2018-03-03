@@ -63,7 +63,7 @@ class AlphaBetaSearch:
        """
         value = self.max_value(state, -1 * sys.maxsize, sys.maxsize, 0)
         for action in state.get_actions(self.__maxplayer):
-            if self.__strategy.utility(state.move(action)) is value:
+            if self.__strategy.utility(state.move(action)) >= value:
                 return action
         raise Exception("No Action Made")
 
