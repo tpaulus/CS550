@@ -10,8 +10,10 @@ import sys
 
 class Strategy(abstractstrategy.Strategy):
 
-    def play(self, board) -> (CheckerBoard, tuple):
-        pass
+    def play(self, board: CheckerBoard) -> (CheckerBoard, tuple):
+        search = AlphaBetaSearch(self, self.maxplayer, self.minplayer, self.maxplies)
+        action = search.alphabeta(board)
+        return board.move(action), action
 
     def utility(self, board: CheckerBoard) -> int:
         __king_weight = 5
@@ -54,8 +56,9 @@ class AlphaBetaSearch:
         self.__minplayer = minplayer
         self.__maxplies = maxplies
         self.__verbose = verbose
+        self.__depth = 0
 
-    def alphabeta(self, state:CheckerBoard):
+    def alphabeta(self, state: CheckerBoard) -> tuple:
         """alphbeta(state) - Run an alphabeta search from the current
        state. Returns best action.
        """
@@ -65,10 +68,11 @@ class AlphaBetaSearch:
                 return action
         raise Exception("No Action Made")
 
-    def max_value(self, state: CheckerBoard, alpha: int, beta: int):
+    def max_value(self, state: CheckerBoard, alpha: int, beta: int) -> int:
         # Negative Infinity
         value = -1 * sys.maxsize
-        if state.is_terminal():
+        self.__depth += 1
+        if state.is_terminal()[0] or self.__depth > self.__maxplies:
             value = self.__strategy.utility(state)
         else:
             for action in state.get_actions(self.__maxplayer):
@@ -79,10 +83,10 @@ class AlphaBetaSearch:
                     alpha = max(alpha, value)
         return value
 
-    def min_value(self, state: CheckerBoard, alpha: int, beta: int):
+    def min_value(self, state: CheckerBoard, alpha: int, beta: int) -> int:
         # Infinity
         value = sys.maxsize
-        if state.is_terminal():
+        if state.is_terminal()[0]:
             value = self.__strategy.utility(state)
         else:
             for action in state.get_actions(self.__minplayer):
