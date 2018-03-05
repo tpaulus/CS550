@@ -9,6 +9,15 @@ import time
 # human - human player, prompts for input
 import human
 from checkerboard import *
+import imp
+import sys
+major = sys.version_info[0]
+minor = sys.version_info[1]
+modpath = "__pycache__/tonto.cpython-{}{}.pyc".format(major, minor)
+tonto = imp.load_compiled("tonto", modpath)
+
+# If the tonto import fails remember that the compiled file is ignored by git
+
 
 
 # tonto - Professor Roch's not too smart strategy
@@ -19,7 +28,6 @@ from checkerboard import *
 # against another computer player.
 #
 # Decompilation is cheating, don't do it.
-# import tonto
 
 
 def elapsed(earlier, later):
@@ -41,7 +49,7 @@ def elapsed(earlier, later):
     return time.strftime('%H:%M:%S', time.gmtime(later - earlier))
 
 
-def Game(red=human.Strategy, black=human.Strategy,
+def Game(red=human.Strategy, black=tonto.Strategy,
          maxplies=5, init=None, verbose=True, firstmove=0):
     """Game(red, black, maxplies, init, verbose, turn)
     Start a game of checkers
