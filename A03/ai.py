@@ -25,7 +25,7 @@ class Strategy(abstractstrategy.Strategy):
         return board.move(action), action
 
     def utility(self, board: CheckerBoard) -> int:
-        __king_weight = 5
+        __king_weight = 3
         kings = board.get_kingsN()
         pawns = board.get_pawnsN()
 
