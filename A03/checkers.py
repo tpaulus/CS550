@@ -65,9 +65,7 @@ def Game(red=human.Strategy, black=tonto.Strategy,
     # e.g. black('b', checkerboard.CheckerBoard, maxplies)
 
     red_strategy = red('r', CheckerBoard, maxplies)
-    # red_ai = ai.Strategy('r', CheckerBoard, maxplies)
     black_strategy = black('b', CheckerBoard, maxplies)
-    # black_ai = ai.Strategy('b', CheckerBoard, maxplies)
 
     turn = firstmove
     board = CheckerBoard() if init is None else init
@@ -88,7 +86,7 @@ def Game(red=human.Strategy, black=tonto.Strategy,
         else:
             if verbose:
                 print("Black Player's Turn")
-                print("Black Utility: {}".format(black_strategy.utility(board)))
+                print("Calculated Utility: {}".format(black_strategy.utility(board)))
             board, action = black_strategy.play(board)
             if action is None:
                 if verbose:
