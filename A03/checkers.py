@@ -101,11 +101,15 @@ def Game(red=human.Strategy, black=tonto.Strategy,
         if turn % 2 == 0:
             if verbose:
                 print("End of Cycle")
+                print(board)
             print("\n\n")
 
     if board.is_terminal()[0]:
         winner = board.is_terminal()[1]
-        print("Game Over! - {} wins".format(winner))
+        if winner is None:
+            print("Game Over! It was a draw")
+        else:
+            print("Game Over! - {} wins".format(winner))
     else:
         print("The other player Forfeit - {} wins!".format(winner))
 
