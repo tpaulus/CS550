@@ -21,6 +21,7 @@ class Strategy(abstractstrategy.Strategy):
     def play(self, board: CheckerBoard) -> (CheckerBoard, tuple):
         search = AlphaBetaSearch(self, self.maxplayer, self.minplayer, self.maxplies)
         action = search.alphabeta(board)
+        # Forfeit
         if action is None:
             return board, None
         return board.move(action), action
