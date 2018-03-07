@@ -100,7 +100,7 @@ def Game(red=human.Strategy, black=tonto.Strategy,
             if verbose:
                 print("End of Cycle")
                 print(board)
-            print("\n\n")
+                print("\n\n")
 
     if board.is_terminal()[0]:
         winner = board.is_terminal()[1]
