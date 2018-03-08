@@ -17,9 +17,6 @@ minor = sys.version_info[1]
 modpath = "__pycache__/tonto.cpython-{}{}.pyc".format(major, minor)
 tonto = imp.load_compiled("tonto", modpath)
 
-# Todo: Remove Bad Ai before turnin
-import lucky
-
 # If the tonto import fails remember that the compiled file is ignored by git
 
 
@@ -52,8 +49,8 @@ def elapsed(earlier, later):
     return time.strftime('%H:%M:%S', time.gmtime(later - earlier))
 
 
-def Game(red=ai.Strategy, black=tonto.Strategy,
-         maxplies=5, init=None, verbose=True, firstmove=0):
+def Game(red=human.Strategy, black=ai.Strategy,
+         maxplies=8, init=None, verbose=True, firstmove=0):
     """Game(red, black, maxplies, init, verbose, turn)
     Start a game of checkers
     red,black - Strategy classes (not instances)
