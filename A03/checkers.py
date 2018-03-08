@@ -23,7 +23,6 @@ import lucky
 # If the tonto import fails remember that the compiled file is ignored by git
 
 
-
 # tonto - Professor Roch's not too smart strategy
 # You are not given source code to this, but compiled .pyc files
 # are available for Python 3.5 and 3.6 (fails otherwise).

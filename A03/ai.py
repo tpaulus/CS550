@@ -9,7 +9,7 @@ from checkerboard import *
 
 
 class Strategy(abstractstrategy.Strategy):
-    __utility_weights = [100, 10, 1]
+    __utility_weights = [100, 10, 1]  # Pieces, Kings, Board Position
 
     def play(self, board: CheckerBoard) -> (CheckerBoard, tuple):
         search = AlphaBetaSearch(self, self.maxplayer, self.minplayer, self.maxplies)
@@ -36,14 +36,14 @@ class Strategy(abstractstrategy.Strategy):
                 player_pieces += 1
                 if kingP:
                     player_kings += 1
-                player_pos_sum += self.evaluate_position(board, self.maxplayer, _r, _c)
+                player_pos_sum += self.__evaluate_position(board, self.maxplayer, _r, _c)
 
             else:
                 # Opponent
                 opponent_pieces += 1
                 if kingP:
                     opponent_kings += 1
-                opponent_pos_sum += self.evaluate_position(board, self.minplayer, _r, _c)
+                opponent_pos_sum += self.__evaluate_position(board, self.minplayer, _r, _c)
 
         player_features = [player_pieces, player_kings, player_pos_sum]
         player_score = sum(feature * weight for (feature, weight) in zip(player_features, self.__utility_weights))
@@ -56,8 +56,10 @@ class Strategy(abstractstrategy.Strategy):
         return player_score - opponent_score
 
     @staticmethod
-    def evaluate_position(board: CheckerBoard, player, x, y) -> int:
-        is_edge = (x == 0 or x == 7 or y == 0 or y == 7)
+    def __evaluate_position(board: CheckerBoard, player, x, y) -> int:
+        edge_size = board.edgesize - 1
+        is_edge = (x == 0 or x == edge_size or y == 0 or y == edge_size)
+
         return (5 if is_edge else 3) + board.disttoking(player, y)
 
 
@@ -90,13 +92,12 @@ class AlphaBetaSearch:
         self.__maxplies = maxplies
         self.__verbose = verbose
 
+
     def alphabeta(self, state: CheckerBoard) -> tuple:
         """alphbeta(state) - Run an alphabeta search from the current
        state. Returns best action.
        """
         return self.max_value(state, -1 * math.inf, math.inf, 0)[1]
-
-    # raise Exception("No Action Made")
 
     def max_value(self, state: CheckerBoard, alpha: int, beta: int, depth: int) -> (int, tuple):
         # Negative Infinity
