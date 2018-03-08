@@ -3,16 +3,9 @@ ai - search & strategy module
 
 implement a concrete Strategy class and AlphaBetaSearch
 """
-import sys
-
+import math
 import abstractstrategy
 from checkerboard import *
-
-
-class Node:
-    def __init__(self, state: CheckerBoard, super_parent=None):
-        self.state = state
-        self.super_parent = super_parent
 
 
 class Strategy(abstractstrategy.Strategy):
@@ -26,7 +19,6 @@ class Strategy(abstractstrategy.Strategy):
             return board, None
         return board.move(action), action
 
-    # Based off of https://github.com/billjeffries/jsCheckersAI/blob/master/scripts/checkers-engine.js
     def utility(self, board: CheckerBoard) -> int:
         player_pieces = 0
         player_kings = 0
@@ -102,41 +94,49 @@ class AlphaBetaSearch:
         """alphbeta(state) - Run an alphabeta search from the current
        state. Returns best action.
        """
-        action = self.max_value(Node(state, None), -1 * sys.maxsize, sys.maxsize, 0)[1]
-        return action
+        return self.max_value(state, -1 * math.inf, math.inf, 0)[1]
 
     # raise Exception("No Action Made")
 
-    def max_value(self, node: Node, alpha: int, beta: int, depth: int) -> (int, tuple):
+    def max_value(self, state: CheckerBoard, alpha: int, beta: int, depth: int) -> (int, tuple):
         # Negative Infinity
-        value = -1 * sys.maxsize
-        if node.state.is_terminal()[0] or depth > self.__maxplies:
-            value = self.__strategy.utility(node.state)
+        value = -1 * math.inf
+        best_option = None
+
+        if state.is_terminal()[0] or depth > self.__maxplies:
+            value = self.__strategy.utility(state)
         else:
-            for action in node.state.get_actions(self.__maxplayer):
-                if depth == 0:
-                    node.super_parent = action
-                value = max(value,
-                            self.min_value(Node(node.state.move(action), node.super_parent), alpha, beta, depth + 1)[0])
+            for action in state.get_actions(self.__maxplayer):
+                minv, _ = self.min_value(state.move(action), alpha, beta, depth + 1)
+                if minv > value:
+                    # New Better Option
+                    value = minv
+                    best_option = action
                 if value >= beta:
+                    # Prune
                     break
                 else:
                     alpha = max(alpha, value)
-        return value, node.super_parent
 
-    def min_value(self, node: Node, alpha: int, beta: int, depth: int) -> (int, tuple):
+        return value, best_option
+
+    def min_value(self, state: CheckerBoard, alpha: int, beta: int, depth: int) -> (int, tuple):
         # Infinity
-        value = sys.maxsize
-        if node.state.is_terminal()[0] or depth > self.__maxplies:
-            value = self.__strategy.utility(node.state)
+        value = math.inf
+        worst_option = None
+
+        if state.is_terminal()[0] or depth > self.__maxplies:
+            value = self.__strategy.utility(state)
         else:
-            for action in node.state.get_actions(self.__minplayer):
-                # Always super parent because min is never called first
-                value = min(value,
-                            self.max_value(Node(node.state.move(action), node.super_parent), alpha, beta, depth + 1)[
-                                0])
+            for action in state.get_actions(self.__minplayer):
+                maxv, _ = self.max_value(state.move(action), alpha, beta, depth + 1)
+                if maxv < value:
+                    # New Worst Option
+                    value = maxv
+                    worst_option = action
                 if value <= alpha:
+                    # Prune
                     break
                 else:
                     beta = min(beta, value)
-        return value, node.super_parent
+        return value, worst_option
