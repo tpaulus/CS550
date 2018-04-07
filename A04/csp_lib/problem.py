@@ -1,7 +1,7 @@
 from .util import is_in
 
-class Problem:
 
+class Problem:
     """The abstract class for a formal problem. You should subclass
     this and implement the methods actions and result, and possibly
     __init__, goal_test, and path_cost. Then you will create instances
@@ -49,4 +49,3 @@ class Problem:
         """For optimization problems, each state has a value.  Hill-climbing
         and related algorithms try to maximize this value."""
         raise NotImplementedError
-    

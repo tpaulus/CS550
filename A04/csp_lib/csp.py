@@ -1,7 +1,7 @@
-
 from .util import (count, first)
 
 from .problem import Problem
+
 
 class CSP(Problem):
     """This class describes finite-domain Constraint Satisfaction Problems.
@@ -84,10 +84,12 @@ class CSP(Problem):
 
     def nconflicts(self, var, val, assignment):
         """Return the number of conflicts var=val has with other variables."""
+
         # Subclasses may implement this more efficiently
         def conflict(var2):
             return (var2 in assignment and
                     not self.constraints(var, val, var2, assignment[var2]))
+
         return count(conflict(v) for v in self.neighbors[var])
 
     def display(self, assignment):
