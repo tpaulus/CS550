@@ -25,7 +25,7 @@ def AC3(csp: CSP, queue: list = None, removals: list = None):
             if csp.domains[i] is None:
                 return False
             for x in csp.neighbors[i]:
-                if x not in csp.neighbors[j]:
+                if (x, i) not in queue:
                     queue.append((x, i))
     return True
 
