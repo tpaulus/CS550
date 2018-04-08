@@ -10,9 +10,10 @@ if __name__ == "__main__":
         s = Sudoku(puzzle)  # construct a Sudoku problem
         print(s.display(s.infer_assignment()))
 
-        if AC3(deepcopy(s)):
+        ac3_s = deepcopy(s)
+        if AC3(ac3_s):
             print("Solved via AC3")
-            print(s.display(s.infer_assignment()))
+            print(ac3_s.display(ac3_s.infer_assignment()))
 
         else:
             print("Could not solve via AC3")
