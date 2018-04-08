@@ -5,7 +5,8 @@ from constraint_prop import AC3
 from csp_lib.sudoku import (Sudoku, easy1, harder1)
 
 if __name__ == "__main__":
-    for puzzle in [easy1, harder1]:
+    # for puzzle in [easy1, harder1]:
+    for puzzle in [easy1]:
         s = Sudoku(puzzle)  # construct a Sudoku problem
         print(s.display(s.infer_assignment()))
 
