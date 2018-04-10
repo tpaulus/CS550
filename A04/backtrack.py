@@ -1,9 +1,10 @@
 from csp_lib.backtrack_util import (first_unassigned_variable,
                                     unordered_domain_values,
                                     no_inference)
+from csp_lib.csp import CSP
 
 
-def backtracking_search(csp,
+def backtracking_search(csp: CSP,
                         select_unassigned_variable=first_unassigned_variable,
                         order_domain_values=unordered_domain_values,
                         inference=no_inference):
@@ -22,7 +23,24 @@ def backtracking_search(csp,
         csp should be in a goal state.
         """
 
-        raise notImplemented
+        var = select_unassigned_variable(assignment, csp)
+        if var is None:
+            return assignment
+        for value in order_domain_values(var, assignment, csp):
+            # Is consistent
+            if csp.nconflicts(var, value, assignment) is 0:
+                csp.assign(var, value, assignment)
+                # Propagate new constraints?
+                inferences = inference(csp, var, value, assignment, None)
+                if inferences is not None or inferences:
+                    csp.assign(var, value, assignment)
+                    r = backtrack(assignment)
+                    if r is not None or r:
+                        return r
+
+                    csp.unassign(var, assignment)
+
+        return None
 
     # Call with empty assignments, variables accessed
     # through dynamic scoping (variables in outer
