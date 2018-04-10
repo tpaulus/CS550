@@ -27,8 +27,8 @@ if __name__ == "__main__":
             print("Trying to solve via Back Track")
             result = backtracking_search(s, inference=mac, select_unassigned_variable=mrv)
             print(result)
-            for (var, val) in result:
-                s.curr_domains[var] = list(val)
+            for var in result:
+                s.curr_domains[var] = result[var]
             if is_solved(s):
                 print("Solved via Back Track")
                 s.display(s.infer_assignment())
