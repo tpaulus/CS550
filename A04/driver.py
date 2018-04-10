@@ -25,7 +25,8 @@ if __name__ == "__main__":
             print("Could not solve via AC3: Current Puzzle")
             s.display(s.infer_assignment())
             print("Trying to solve via Back Track")
-            backtracking_search(s, inference=mac)
+            result = backtracking_search(s, inference=mac, select_unassigned_variable=mrv)
+            print(result)
             if is_solved(s):
                 print("Solved via Back Track")
                 s.display(s.infer_assignment())

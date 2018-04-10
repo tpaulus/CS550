@@ -22,9 +22,9 @@ def backtracking_search(csp: CSP,
         Returns None if there is no solution.  Otherwise, the
         csp should be in a goal state.
         """
-
-        var = select_unassigned_variable(assignment, csp)
-        if var is None:
+        try:
+            var = select_unassigned_variable(assignment, csp)
+        except ValueError:
             return assignment
         for value in order_domain_values(var, assignment, csp):
             # Is consistent
