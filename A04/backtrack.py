@@ -46,5 +46,10 @@ def backtracking_search(csp: CSP,
     # through dynamic scoping (variables in outer
     # scope can be accessed in Python)
     result = backtrack({})
+
+    # Assign results of backtrack to puzzle
+    for r in result:
+        csp.curr_domains[r] = result[r]
+
     assert result is None or csp.goal_test(result)
     return result
