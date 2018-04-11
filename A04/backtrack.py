@@ -22,33 +22,36 @@ def backtracking_search(csp: CSP,
         Returns None if there is no solution.  Otherwise, the
         csp should be in a goal state.
         """
-        try:
-            var = select_unassigned_variable(assignment, csp)
-        except ValueError:
-            print("Caught")
-            return assignment
+        if all_vars_assigned(csp):
+            return dict(csp.curr_domains)
+
+        var = select_unassigned_variable(assignment, csp)
         for value in order_domain_values(var, assignment, csp):
             # Is consistent
             if csp.nconflicts(var, value, assignment) is 0:
                 csp.assign(var, value, assignment)
-                # Propagate new constraints?
-                inferences = inference(csp, var, value, assignment, None)
+                removals = list()
+                inferences = inference(csp, var, value, assignment, removals)
                 if inferences is not None or inferences:
-                    assignment[var] = value
-                    removals = csp.suppose(var, value)
+                    removals += csp.suppose(var, value)
+                    recursive_result = backtrack(assignment)
+                    if recursive_result is not None:
+                        return recursive_result
 
-                    r = backtrack(assignment)
-                    if r is not None or r:
-                        return r
-                    csp.unassign(var, assignment)
                     csp.restore(removals)
-
+                    csp.unassign(var, assignment)
         return None
 
     # Call with empty assignments, variables acces sed
     # through dynamic scoping (variables in outer
     # scope can be accessed in Python)
     result = backtrack({})
-
     assert result is None or csp.goal_test(result)
     return result
+
+
+def all_vars_assigned(csp: CSP):
+    for var in csp.curr_domains:
+        if len(csp.curr_domains[var]) is not 1:
+            return False
+    return True
