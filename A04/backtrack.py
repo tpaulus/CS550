@@ -17,7 +17,7 @@ def backtracking_search(csp: CSP,
 
     # See Figure 6.5] of your book for details
 
-    def backtrack(assignment):
+    def backtrack(assignment: dict):
         """Attempt to backtrack search with current assignment
         Returns None if there is no solution.  Otherwise, the
         csp should be in a goal state.
@@ -25,6 +25,7 @@ def backtracking_search(csp: CSP,
         try:
             var = select_unassigned_variable(assignment, csp)
         except ValueError:
+            print("Caught")
             return assignment
         for value in order_domain_values(var, assignment, csp):
             # Is consistent
@@ -33,19 +34,18 @@ def backtracking_search(csp: CSP,
                 # Propagate new constraints?
                 inferences = inference(csp, var, value, assignment, None)
                 if inferences is not None or inferences:
-                    csp.assign(var, value, assignment)
+                    assignment[var] = value
                     removals = csp.suppose(var, value)
 
                     r = backtrack(assignment)
                     if r is not None or r:
                         return r
-
                     csp.unassign(var, assignment)
                     csp.restore(removals)
 
         return None
 
-    # Call with empty assignments, variables accessed
+    # Call with empty assignments, variables acces sed
     # through dynamic scoping (variables in outer
     # scope can be accessed in Python)
     result = backtrack({})
