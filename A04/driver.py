@@ -1,6 +1,6 @@
 from backtrack import backtracking_search
 from constraint_prop import AC3
-from csp_lib.backtrack_util import mrv, mac
+from csp_lib.backtrack_util import mrv, mac, forward_checking
 from csp_lib.sudoku import (Sudoku, easy1, harder1)
 
 
@@ -25,7 +25,7 @@ if __name__ == "__main__":
             print("Could not solve via AC3: Current Puzzle")
             s.display(s.infer_assignment())
             print("Trying to solve via Back Track")
-            result = backtracking_search(s, inference=mac, select_unassigned_variable=mrv)
+            result = backtracking_search(s, inference=forward_checking, select_unassigned_variable=mrv)
             if is_solved(s):
                 print("Solved via Back Track")
                 s.display(s.infer_assignment())
