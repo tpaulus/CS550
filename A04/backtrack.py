@@ -34,11 +34,14 @@ def backtracking_search(csp: CSP,
                 inferences = inference(csp, var, value, assignment, None)
                 if inferences is not None or inferences:
                     csp.assign(var, value, assignment)
+                    removals = csp.suppose(var, value)
+
                     r = backtrack(assignment)
                     if r is not None or r:
                         return r
 
                     csp.unassign(var, assignment)
+                    csp.restore(removals)
 
         return None
 
@@ -46,10 +49,6 @@ def backtracking_search(csp: CSP,
     # through dynamic scoping (variables in outer
     # scope can be accessed in Python)
     result = backtrack({})
-
-    # Assign results of backtrack to puzzle
-    for r in result:
-        csp.curr_domains[r] = result[r]
 
     assert result is None or csp.goal_test(result)
     return result
