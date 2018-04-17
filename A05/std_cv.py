@@ -1,4 +1,3 @@
-
 from statistics import (stdev, mean)
 from ml_lib.learning import (err_ratio, train_and_test)
 

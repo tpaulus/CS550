@@ -15,11 +15,12 @@ import random
 from statistics import mean, stdev
 from collections import defaultdict
 
+
 # ______________________________________________________________________________
 
 
 def euclidean_distance(X, Y):
-    return math.sqrt(sum([(x - y)**2 for x, y in zip(X, Y)]))
+    return math.sqrt(sum([(x - y) ** 2 for x, y in zip(X, Y)]))
 
 
 def rms_error(X, Y):
@@ -27,7 +28,7 @@ def rms_error(X, Y):
 
 
 def ms_error(X, Y):
-    return mean([(x - y)**2 for x, y in zip(X, Y)])
+    return mean([(x - y) ** 2 for x, y in zip(X, Y)])
 
 
 def mean_error(X, Y):
@@ -44,6 +45,7 @@ def mean_boolean_error(X, Y):
 
 def hamming_distance(X, Y):
     return sum(x != y for x, y in zip(X, Y))
+
 
 # ______________________________________________________________________________
 
@@ -176,13 +178,13 @@ class DataSet:
 
     def attributes_to_numbers(self):
         """Converts textual attributes to numbers."""
-        
+
         # One hot vectors might be more appropriate, but we will not 
         # do this here.
         if len(self.examples) > 0:
             if not self.got_values_flag:
                 # Get list of distinct values
-                self.update_values() 
+                self.update_values()
             for aidx in self.attrs:
                 # Assume that if strings are involved, all values
                 # are strings
@@ -193,7 +195,7 @@ class DataSet:
                     for eidx in range(len(self.examples)):
                         self.examples[eidx][aidx] = \
                             self.values[aidx].index(self.examples[eidx][aidx])
-                            
+
                 self.got_values_flag = False  # no longer valid
 
     def remove_examples(self, value=""):
@@ -243,6 +245,7 @@ class DataSet:
         return '<DataSet({}): {:d} examples, {:d} attributes>'.format(
             self.name, len(self.examples), len(self.attrs))
 
+
 # ______________________________________________________________________________
 
 
@@ -255,6 +258,7 @@ def parse_csv(input, delim=','):
     [[1, 2, 3], [0, 2, 'na']]"""
     lines = [line for line in input.splitlines() if line.strip()]
     return [list(map(num_or_str, line.split(delim))) for line in lines]
+
 
 # ______________________________________________________________________________
 
@@ -312,6 +316,7 @@ class CountingProbDist:
                                             list(self.dictionary.values()))
         return self.sampler()
 
+
 # ______________________________________________________________________________
 
 
@@ -323,7 +328,9 @@ def PluralityLearner(dataset):
     def predict(example):
         """Always return same result: the most popular from the training set."""
         return most_popular
+
     return predict
+
 
 # ______________________________________________________________________________
 
@@ -331,7 +338,7 @@ def PluralityLearner(dataset):
 def NaiveBayesLearner(dataset, continuous=True, simple=False):
     if simple:
         return NaiveBayesSimple(dataset)
-    if(continuous):
+    if (continuous):
         return NaiveBayesContinuous(dataset)
     else:
         return NaiveBayesDiscrete(dataset)
@@ -348,6 +355,7 @@ def NaiveBayesSimple(distribution):
     def predict(example):
         """Predict the target value for example. Calculate probabilities for each
         class and pick the max."""
+
         def class_probability(targetval):
             attr_dist = attr_dists[targetval]
             return target_dist[targetval] * product(attr_dist[a] for a in example)
@@ -376,10 +384,12 @@ def NaiveBayesDiscrete(dataset):
     def predict(example):
         """Predict the target value for example. Consider each possible value,
         and pick the most likely by looking at each attribute independently."""
+
         def class_probability(targetval):
             return (target_dist[targetval] *
                     product(attr_dists[targetval, attr][example[attr]]
                             for attr in dataset.inputs))
+
         return argmax(target_vals, key=class_probability)
 
     return predict
@@ -396,6 +406,7 @@ def NaiveBayesContinuous(dataset):
     def predict(example):
         """Predict the target value for example. Consider each possible value,
         and pick the most likely by looking at each attribute independently."""
+
         def class_probability(targetval):
             prob = target_dist[targetval]
             for attr in dataset.inputs:
@@ -406,17 +417,21 @@ def NaiveBayesContinuous(dataset):
 
     return predict
 
+
 # ______________________________________________________________________________
 
 
 def NearestNeighborLearner(dataset, k=1):
     """k-NearestNeighbor: the k nearest neighbors vote."""
+
     def predict(example):
         """Find the k closest items, and have them vote for the best."""
         best = heapq.nsmallest(k, ((dataset.distance(e, example), e)
                                    for e in dataset.examples))
         return mode(e[dataset.target] for (d, e) in best)
+
     return predict
+
 
 # ______________________________________________________________________________
 
@@ -424,14 +439,14 @@ def NearestNeighborLearner(dataset, k=1):
 def truncated_svd(X, num_val=2, max_iter=1000):
     """Computes the first component of SVD"""
 
-    def normalize_vec(X, n = 2):
+    def normalize_vec(X, n=2):
         """Normalizes two parts (:m and m:) of the vector"""
         X_m = X[:m]
         X_n = X[m:]
         norm_X_m = norm(X_m, n)
-        Y_m = [x/norm_X_m for x in X_m]
+        Y_m = [x / norm_X_m for x in X_m]
         norm_X_n = norm(X_n, n)
-        Y_n = [x/norm_X_n for x in X_n]
+        Y_n = [x / norm_X_n for x in X_n]
         return Y_m + Y_n
 
     def remove_component(X):
@@ -440,10 +455,10 @@ def truncated_svd(X, num_val=2, max_iter=1000):
         X_n = X[m:]
         for eivec in eivec_m:
             coeff = dotproduct(X_m, eivec)
-            X_m = [x1 - coeff*x2 for x1, x2 in zip(X_m, eivec)]
+            X_m = [x1 - coeff * x2 for x1, x2 in zip(X_m, eivec)]
         for eivec in eivec_n:
             coeff = dotproduct(X_n, eivec)
-            X_n = [x1 - coeff*x2 for x1, x2 in zip(X_n, eivec)]
+            X_n = [x1 - coeff * x2 for x1, x2 in zip(X_n, eivec)]
         return X_m + X_n
 
     m, n = len(X), len(X[0])
@@ -473,10 +488,11 @@ def truncated_svd(X, num_val=2, max_iter=1000):
 
         projected_X = matrix_multiplication(A, [[x] for x in X])
         projected_X = [x[0] for x in projected_X]
-        eivals.append(norm(projected_X, 1)/norm(X, 1))
+        eivals.append(norm(projected_X, 1) / norm(X, 1))
         eivec_m.append(X[:m])
         eivec_n.append(X[m:])
     return (eivec_m, eivec_n, eivals)
+
 
 # ______________________________________________________________________________
 
@@ -532,6 +548,7 @@ class DecisionLeaf:
     def __repr__(self):
         return repr(self.result)
 
+
 # ______________________________________________________________________________
 
 
@@ -579,9 +596,11 @@ def DecisionTreeLearner(dataset):
 
     def information_gain(attr, examples):
         """Return the expected reduction in entropy from splitting by attr."""
+
         def I(examples):
             return information_content([count(target, v, examples)
                                         for v in values[target]])
+
         N = float(len(examples))
         remainder = sum((len(examples_i) / N) * I(examples_i)
                         for (v, examples_i) in split_by(attr, examples))
@@ -600,6 +619,7 @@ def information_content(values):
     probabilities = normalize(removeall(0, values))
     return sum(-p * math.log2(p) for p in probabilities)
 
+
 # ______________________________________________________________________________
 
 
@@ -609,7 +629,7 @@ def RandomForest(dataset, n=5):
     def data_bagging(dataset, m=0):
         """Sample m examples with replacement"""
         n = len(dataset.examples)
-        return weighted_sample_with_replacement(m or n, dataset.examples, [1]*n)
+        return weighted_sample_with_replacement(m or n, dataset.examples, [1] * n)
 
     def feature_bagging(dataset, p=0.7):
         """Feature bagging with probability p to retain an attribute"""
@@ -627,6 +647,7 @@ def RandomForest(dataset, n=5):
                                               inputs=feature_bagging(dataset))) for _ in range(n)]
 
     return predict
+
 
 # ______________________________________________________________________________
 
@@ -658,9 +679,11 @@ def DecisionListLearner(dataset):
         for test, outcome in predict.decision_list:
             if passes(example, test):
                 return outcome
+
     predict.decision_list = decision_list_learning(set(dataset.examples))
 
     return predict
+
 
 # ______________________________________________________________________________
 
@@ -764,22 +787,22 @@ def BackPropagationLearner(dataset, net, learning_rate, epochs):
             for i in range(h_layers, 0, -1):
                 layer = net[i]
                 h_units = len(layer)
-                nx_layer = net[i+1]
+                nx_layer = net[i + 1]
                 # weights from each ith layer node to each i + 1th layer node
                 w = [[node.weights[k] for node in nx_layer] for k in range(h_units)]
 
-                delta[i] = [sigmoid_derivative(layer[j].value) * dotproduct(w[j], delta[i+1])
+                delta[i] = [sigmoid_derivative(layer[j].value) * dotproduct(w[j], delta[i + 1])
                             for j in range(h_units)]
 
             #  Update weights
             for i in range(1, n_layers):
                 layer = net[i]
-                inc = [node.value for node in net[i-1]]
+                inc = [node.value for node in net[i - 1]]
                 units = len(layer)
                 for j in range(units):
                     layer[j].weights = vector_add(layer[j].weights,
                                                   scalar_vector_product(
-                                                  learning_rate * delta[i][j], inc))
+                                                      learning_rate * delta[i][j], inc))
 
     return net
 
@@ -837,7 +860,7 @@ def network(input_units, hidden_layer_sizes, output_units):
     # Make Connection
     for i in range(1, n_layers):
         for n in net[i]:
-            for k in net[i-1]:
+            for k in net[i - 1]:
                 n.inputs.append(k)
                 n.weights.append(0)
     return net
@@ -866,6 +889,7 @@ def init_examples(examples, idx_i, idx_t, o_units):
 
 def find_max_node(nodes):
     return nodes.index(argmax(nodes, key=lambda node: node.value))
+
 
 # ______________________________________________________________________________
 
@@ -904,26 +928,33 @@ def LinearLearner(dataset, learning_rate=0.01, epochs=100):
     def predict(example):
         x = [1] + example
         return dotproduct(w, x)
+
     return predict
+
 
 # ______________________________________________________________________________
 
 
 def EnsembleLearner(learners):
     """Given a list of learning algorithms, have them vote."""
+
     def train(dataset):
         predictors = [learner(dataset) for learner in learners]
 
         def predict(example):
             return mode(predictor(example) for predictor in predictors)
+
         return predict
+
     return train
+
 
 # ______________________________________________________________________________
 
 
 def AdaBoost(L, K):
     """[Figure 18.34]"""
+
     def train(dataset):
         examples, target = dataset.examples, dataset.target
         N = len(examples)
@@ -943,14 +974,17 @@ def AdaBoost(L, K):
             w = normalize(w)
             z.append(math.log((1. - error) / error))
         return WeightedMajority(h, z)
+
     return train
 
 
 def WeightedMajority(predictors, weights):
     """Return a predictor that takes a weighted vote."""
+
     def predict(example):
         return weighted_mode((predictor(example) for predictor in predictors),
                              weights)
+
     return predict
 
 
@@ -964,6 +998,7 @@ def weighted_mode(values, weights):
         totals[v] += w
     return max(list(totals.keys()), key=totals.get)
 
+
 # _____________________________________________________________________________
 # Adapting an unweighted learner for AdaBoost
 
@@ -971,8 +1006,10 @@ def weighted_mode(values, weights):
 def WeightedLearner(unweighted_learner):
     """Given a learner that takes just an unweighted dataset, return
     one that takes also a weight for each example. [p. 749 footnote 14]"""
+
     def train(dataset, weights):
         return unweighted_learner(replicated_dataset(dataset, weights))
+
     return train
 
 
@@ -1001,6 +1038,7 @@ def weighted_replicate(seq, weights, n):
 
 def flatten(seqs): return sum(seqs, [])
 
+
 # _____________________________________________________________________________
 # Functions for testing learners on examples
 
@@ -1017,7 +1055,7 @@ def err_ratio(predict, dataset, examples=None, verbose=0):
         desired = example[dataset.target]
         attributes = [example[i] for i in dataset.inputs]
         output = predict(attributes)
-        #output = predict(dataset.sanitize(example))
+        # output = predict(dataset.sanitize(example))
         if output == desired:
             right += 1
             if verbose >= 2:
@@ -1062,13 +1100,13 @@ def cross_validation(learner, dataset, k=10, trials=1):
             trial_errV += errV
         return trial_errT / trials, trial_errV / trials
     else:
-        fold_errT = 0   # fold error on training data
-        fold_errV = 0   # fold error on validation data
-        
+        fold_errT = 0  # fold error on training data
+        fold_errV = 0  # fold error on validation data
+
         n = len(dataset.examples)
         examples = dataset.examples
-        
-        for fold in range(k):   # for each fold
+
+        for fold in range(k):  # for each fold
             # Shuffle all data            
             random.shuffle(dataset.examples)
             # Split into train and test
@@ -1077,21 +1115,19 @@ def cross_validation(learner, dataset, k=10, trials=1):
             # due to the shuffling above.
             train_data, val_data = train_and_test(dataset, fold * (n / k),
                                                   (fold + 1) * (n / k))
-            
+
             dataset.examples = train_data
             h = learner(dataset)
-            
+
             # predict and accumulate the error rate on 
             # the training and validation data
             fold_errT += err_ratio(h, dataset, train_data)
             fold_errV += err_ratio(h, dataset, val_data)
             # Reverting back to original once test is completed
             dataset.examples = examples
-            
+
         # Return average per fold rates
         return fold_errT / k, fold_errV / k
-
-
 
 
 def leave_one_out(learner, dataset, size=None):
@@ -1106,9 +1142,9 @@ def learningcurve(learner, dataset, trials=10, sizes=None):
     def score(learner, size):
         random.shuffle(dataset.examples)
         return train_and_test(learner, dataset, 0, size)
+
     return [(size, mean([score(learner, size) for t in range(trials)]))
             for size in sizes]
-
 
 
 # ______________________________________________________________________________
@@ -1149,6 +1185,7 @@ def ContinuousXor(n):
         x, y = [random.uniform(0.0, 2.0) for i in '12']
         examples.append([x, y, int(x) != int(y)])
     return DataSet(name="continuous xor", examples=examples)
+
 
 # ______________________________________________________________________________
 

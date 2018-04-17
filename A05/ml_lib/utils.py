@@ -73,7 +73,7 @@ def mode(data):
 def powerset(iterable):
     """powerset([1,2,3]) --> (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"""
     s = list(iterable)
-    return list(chain.from_iterable(combinations(s, r) for r in range(len(s)+1)))[1:]
+    return list(chain.from_iterable(combinations(s, r) for r in range(len(s) + 1)))[1:]
 
 
 # ______________________________________________________________________________
@@ -195,7 +195,7 @@ def inverse_matrix(X):
     assert len(X[0]) == 2
     det = X[0][0] * X[1][1] - X[0][1] * X[1][0]
     assert det != 0
-    inv_mat = scalar_matrix_product(1.0/det, [[X[1][1], -X[0][1]], [-X[1][0], X[0][0]]])
+    inv_mat = scalar_matrix_product(1.0 / det, [[X[1][1], -X[0][1]], [-X[1][0], X[0][0]]])
 
     return inv_mat
 
@@ -228,7 +228,7 @@ def rounder(numbers, d=4):
     if isinstance(numbers, (int, float)):
         return round(numbers, d)
     else:
-        constructor = type(numbers)     # Can be list, set, tuple, etc.
+        constructor = type(numbers)  # Can be list, set, tuple, etc.
         return constructor(rounder(n, d) for n in numbers)
 
 
@@ -258,7 +258,7 @@ def normalize(dist):
 
 def norm(X, n=2):
     """Return the n-norm of vector X"""
-    return sum([x**n for x in X])**(1/n)
+    return sum([x ** n for x in X]) ** (1 / n)
 
 
 def clip(x, lowest, highest):
@@ -272,7 +272,7 @@ def sigmoid_derivative(value):
 
 def sigmoid(x):
     """Return activation value of x with sigmoid function"""
-    return 1/(1 + math.exp(-x))
+    return 1 / (1 + math.exp(-x))
 
 
 def step(x):
@@ -282,7 +282,7 @@ def step(x):
 
 def gaussian(mean, st_dev, x):
     """Given the mean and standard deviation of a distribution, it returns the probability of x."""
-    return 1/(math.sqrt(2*math.pi)*st_dev)*math.e**(-0.5*(float(x-mean)/st_dev)**2)
+    return 1 / (math.sqrt(2 * math.pi) * st_dev) * math.e ** (-0.5 * (float(x - mean) / st_dev) ** 2)
 
 
 try:  # math.isclose was added in Python 3.5; but we might be in 3.4
@@ -337,7 +337,7 @@ def distance_squared(a, b):
     """The square of the distance between two (x, y) points."""
     xA, yA = a
     xB, yB = b
-    return (xA - xB)**2 + (yA - yB)**2
+    return (xA - xB) ** 2 + (yA - yB) ** 2
 
 
 def vector_clip(vector, lowest, highest):
@@ -403,8 +403,8 @@ def print_table(table, header=None, sep='   ', numfmt='{}'):
              for row in table]
 
     sizes = list(
-            map(lambda seq: max(map(len, seq)),
-                list(zip(*[map(str, row) for row in table]))))
+        map(lambda seq: max(map(len, seq)),
+            list(zip(*[map(str, row) for row in table]))))
 
     for row in table:
         print(sep.join(getattr(
@@ -554,18 +554,20 @@ class Expr(object):
                 and self.op == other.op
                 and self.args == other.args)
 
-    def __hash__(self): return hash(self.op) ^ hash(self.args)
+    def __hash__(self):
+        return hash(self.op) ^ hash(self.args)
 
     def __repr__(self):
         op = self.op
         args = [str(arg) for arg in self.args]
-        if op.isidentifier():       # f(x) or f(x, y)
+        if op.isidentifier():  # f(x) or f(x, y)
             return '{}({})'.format(op, ', '.join(args)) if args else op
-        elif len(args) == 1:        # -x or -(x + 1)
+        elif len(args) == 1:  # -x or -(x + 1)
             return op + args[0]
-        else:                       # (x - y)
+        else:  # (x - y)
             opp = (' ' + op + ' ')
             return '(' + opp.join(args) + ')'
+
 
 # An 'Expression' is either an Expr or a Number.
 # Symbol is not an explicit type; it is any Expr with 0 args.
@@ -600,11 +602,13 @@ def arity(expression):
     else:  # expression is a number
         return 0
 
+
 # For operators that are not defined in Python, we allow new InfixOps:
 
 
 class PartialExpr:
     """Given 'P |'==>'| Q, first form PartialExpr('==>', P), then combine with Q."""
+
     def __init__(self, op, lhs):
         self.op, self.lhs = op, lhs
 
@@ -647,6 +651,7 @@ class defaultkeydict(collections.defaultdict):
     >>> d = defaultkeydict(len); d['four']
     4
     """
+
     def __missing__(self, key):
         self[key] = result = self.default_factory(key)
         return result
@@ -656,6 +661,7 @@ class hashabledict(dict):
     """Allows hashing by representing a dictionary as tuple of key:value pairs
        May cause problems as the hash value may change during runtime
     """
+
     def __tuplify__(self):
         return tuple(sorted(self.items()))
 
@@ -687,7 +693,6 @@ class hashabledict(dict):
 
 
 class Queue:
-
     """Queue is an abstract class/interface. There are three types:
         Stack(): A Last In First Out Queue.
         FIFOQueue(): A First In First Out Queue.
@@ -715,7 +720,6 @@ def Stack():
 
 
 class FIFOQueue(Queue):
-
     """A First-In-First-Out Queue."""
 
     def __init__(self, maxlen=None, items=[]):
@@ -747,7 +751,6 @@ class FIFOQueue(Queue):
 
 
 class PriorityQueue(Queue):
-
     """A queue in which the minimum (or maximum) element (as determined by f and
     order) is returned first. If order is min, the item with minimum f(x) is
     returned first; if order is max, then it is the item with maximum f(x).
