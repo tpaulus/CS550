@@ -10,17 +10,26 @@ from random import shuffle
 
 from copy import deepcopy
 
+__LEARNING_METHODS = [DecisionTreeLearner, NeuralNetLearner]
+
 
 def shuffle_data(dataset: DataSet):
     shuffle(dataset.examples)
 
 
 def learn(dataset: DataSet):
-    raise NotImplemented
+    data = deepcopy(dataset)
+    shuffle_data(data)
+
+    for METHOD in __LEARNING_METHODS:
+        print(cross_validation(METHOD, data))
 
 
 def main():
-    raise NotImplemented
+    datasets = [DataSet(examples="iris")]
+
+    for dataset in datasets:
+        learn(dataset)
 
 
 if __name__ == '__main__':
