@@ -38,4 +38,4 @@ def cross_validation(learner, dataset, k=10):
         dataset.examples = examples
 
     # Return average per fold rates
-    return mean(fold_errV), stdev(fold_errV), fold_errV, h
+    return mean(fold_errV), stdev(fold_errV), fold_errV
