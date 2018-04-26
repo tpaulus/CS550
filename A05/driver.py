@@ -7,10 +7,7 @@ Created on Apr 15, 2018
 from ml_lib.learning import (DataSet, DecisionTreeLearner, NeuralNetLearner)
 from std_cv import cross_validation
 from random import shuffle
-
 from copy import deepcopy
-
-__LEARNING_METHODS = [DecisionTreeLearner, NeuralNetLearner]
 
 
 def shuffle_data(dataset: DataSet):
@@ -21,12 +18,14 @@ def learn(dataset: DataSet):
     data = deepcopy(dataset)
     shuffle_data(data)
 
-    for METHOD in __LEARNING_METHODS:
-        print(cross_validation(METHOD, data))
+    print(cross_validation(DecisionTreeLearner, data))
+    # Neural Net Needs the Numbers like the Cookie Monster needs Cookies
+    data.classes_to_numbers()
+    print(cross_validation(NeuralNetLearner, data))
 
 
 def main():
-    datasets = [DataSet(name="iris")]
+    datasets = [DataSet(name="iris"), DataSet(name="orings")]
 
     for dataset in datasets:
         learn(dataset)
