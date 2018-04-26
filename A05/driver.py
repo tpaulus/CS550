@@ -32,7 +32,9 @@ def learn(dataset: DataSet) -> dict:
 
 
 def main():
-    datasets = [DataSet(name="iris"), DataSet(name="orings")]
+    datasets = [DataSet(name="iris"), DataSet(name="orings"), DataSet(name="zoo"), DataSet(name="restaurant")]
+    # Abalone completes, but will take a while
+    # datasets.append(DataSet(name="abalone"))
 
     header = ["Dataset   ",
               "Solve Method        ",
