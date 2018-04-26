@@ -17,10 +17,12 @@ def shuffle_data(dataset: DataSet):
 def learn(dataset: DataSet):
     data = deepcopy(dataset)
     shuffle_data(data)
-
+    
+    print(data.name)
     print(cross_validation(DecisionTreeLearner, data))
     # Neural Net Needs the Numbers like the Cookie Monster needs Cookies
     data.classes_to_numbers()
+    data.attributes_to_numbers()
     print(cross_validation(NeuralNetLearner, data))
 
 
