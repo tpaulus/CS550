@@ -10,10 +10,6 @@ def cross_validation(learner, dataset, k=10):
     Returns tuple (mean_err, std_err, fold_errors, models)
     """
 
-    if k is None:
-        k = len(dataset.examples)
-
-    fold_errT = list()  # fold error on training data
     fold_errV = list()  # fold error on validation data
 
     n = len(dataset.examples)
@@ -30,12 +26,10 @@ def cross_validation(learner, dataset, k=10):
         dataset.examples = train_data
         h = learner(dataset)
 
-        # predict and accumulate the error rate on
-        # the training and validation data
-        fold_errT.append(err_ratio(h, dataset, train_data))
+        # predict and accumulate the error rate on validation data
         fold_errV.append(err_ratio(h, dataset, val_data))
         # Reverting back to original once test is completed
         dataset.examples = examples
 
-    # Return average per fold rates
+    # Return average per fold rates for validation data
     return mean(fold_errV), stdev(fold_errV), fold_errV
