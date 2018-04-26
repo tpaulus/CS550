@@ -26,7 +26,7 @@ def learn(dataset: DataSet):
 
 
 def main():
-    datasets = [DataSet(examples="iris")]
+    datasets = [DataSet(name="iris")]
 
     for dataset in datasets:
         learn(dataset)
