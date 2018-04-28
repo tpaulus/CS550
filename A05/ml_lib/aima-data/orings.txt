@@ -69,10 +69,12 @@ Source: http://www1.ics.uci.edu/pub/machine-learning-databases/space-shuttle/
    below freezing.
 
 6. Number of Attributes: 5
+   Note:  o-ring data attributes were reordered to make prediction
+   value last (2018-04-26 MAR)
      1. Number of O-rings at risk on a given flight
-     2. Number experiencing thermal distress
-     3. Launch temperature (degrees F)
-     4. Leak-check pressure (psi)
-     5. Temporal order of flight
+     2. Launch temperature (degrees F)
+     3. Leak-check pressure (psi)
+     4. Temporal order of flight
+     5. Number of O-rings experiencing thermal distress
 
 7. Attribute Information: all values are positive integers

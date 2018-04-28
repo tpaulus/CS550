@@ -33,7 +33,6 @@ def learn(dataset: DataSet) -> dict:
 
 def main():
     datasets = [DataSet(name="iris"), DataSet(name="orings"), DataSet(name="zoo"), DataSet(name="restaurant")]
-    datasets[1].setproblem(1, datasets[1].inputs)
     # Abalone completes, but will take a while
     # datasets.append(DataSet(name="abalone"))
 
